@@ -1,0 +1,1 @@
+export const ErrorReducerName = 'ERROR'
