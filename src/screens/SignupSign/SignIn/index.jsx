@@ -1,21 +1,22 @@
-import React, { useState, useEffect } from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import Copyright from 'components/Copyright';
-import PropTypes from 'prop-types';
-import { emailRegx } from 'utils/commonConstants';
-import { FormHelperText } from '@material-ui/core';
+import React, { useState, useEffect } from 'react'
+import Avatar from '@material-ui/core/Avatar'
+import Button from '@material-ui/core/Button'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import TextField from '@material-ui/core/TextField'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Checkbox from '@material-ui/core/Checkbox'
+import Link from '@material-ui/core/Link'
+import Grid from '@material-ui/core/Grid'
+import Box from '@material-ui/core/Box'
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
+import Typography from '@material-ui/core/Typography'
+import { makeStyles } from '@material-ui/core/styles'
+import Container from '@material-ui/core/Container'
+import Copyright from 'components/Copyright'
+import PropTypes from 'prop-types'
+import { emailRegx } from 'utils/commonConstants'
+import { FormHelperText } from '@material-ui/core'
+import GetStartedDialog from 'components/Dialog/GetStartedDialog'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -35,26 +36,41 @@ const useStyles = makeStyles(theme => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
-}));
+}))
 
 export default function SignIn({ history }) {
+  const [open, setOpen] = React.useState(false)
+  const [selectedValue, setSelectedValue] = React.useState(null)
+
+  const handleClickOpen = () => {
+    setOpen(true)
+  }
+
+  const handleClose = value => {
+    setOpen(false)
+    setSelectedValue(value)
+    if (value === 'Student') {
+      history.push('/student-signup')
+    } else if (value === 'Tutor') history.push('/tutor-signup')
+  }
+
   const signInFormFields = {
     email: '',
     password: '',
-  };
-  const [isError, setIsError] = useState(false);
-  const [isEmailValid, setIsEmailValid] = useState(false);
-  const [signInFormState, setSignUpFormState] = useState(signInFormFields);
-  const classes = useStyles();
+  }
+  const [isError, setIsError] = useState(false)
+  const [isEmailValid, setIsEmailValid] = useState(false)
+  const [signInFormState, setSignUpFormState] = useState(signInFormFields)
+  const classes = useStyles()
 
   const changeHandler = event => {
-    event.stopPropagation();
-    const { name, value } = event.target;
+    event.stopPropagation()
+    const { name, value } = event.target
     setSignUpFormState({
       ...signInFormState,
       [name]: value,
-    });
-  };
+    })
+  }
 
   useEffect(() => {
     if (
@@ -62,13 +78,13 @@ export default function SignIn({ history }) {
       signInFormState.password.length !== 0 &&
       signInFormState.password.length === 6
     ) {
-      setIsError(false);
+      setIsError(false)
     }
     if (emailRegx.test(signInFormState.email)) {
-      setIsEmailValid(false);
-    } else setIsEmailValid(true);
+      setIsEmailValid(false)
+    } else setIsEmailValid(true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [signInFormState, isEmailValid]);
+  }, [signInFormState, isEmailValid])
 
   const submitLoginForm = () => {
     if (
@@ -76,13 +92,13 @@ export default function SignIn({ history }) {
       signInFormState.password.length === 0 ||
       signInFormState.password.length !== 6
     ) {
-      setIsError(true);
+      setIsError(true)
     } else {
-      localStorage.setItem('token', 'qwerty');
-      history.push('/dashboard');
+      localStorage.setItem('token', 'qwerty')
+      history.push('/dashboard')
       // setIsError(false);
     }
-  };
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -171,13 +187,17 @@ export default function SignIn({ history }) {
                 </Link>
               </Grid>
               <Grid item>
-                <Link
-                  href=""
-                  variant="body2"
-                  onClick={() => history.push('/signup')}
-                >
+                <Link variant="body2" onClick={handleClickOpen}>
                   Do not have an account? Sign Up
                 </Link>
+                {/* <Button color="default" onClick={handleClickOpen}>
+                  Do not have an account? Sign Up
+                </Button> */}
+                <GetStartedDialog
+                  selectedValue={selectedValue}
+                  open={open}
+                  onClose={handleClose}
+                />
               </Grid>
             </Grid>
           </Grid>
@@ -187,9 +207,9 @@ export default function SignIn({ history }) {
         <Copyright />
       </Box>
     </Container>
-  );
+  )
 }
 
 SignIn.propTypes = {
   history: PropTypes.object.isRequired,
-};
+}

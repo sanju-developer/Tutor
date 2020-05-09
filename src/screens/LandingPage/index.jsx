@@ -1,8 +1,15 @@
 import React from 'react';
-import SignUp from './Signup';
+import Footer from 'components/Footer';
+import HomeSidebar from 'components/HomeSidebar';
 
-const LandingPage = () => {
-  return <SignUp />;
-};
-
-export default LandingPage;
+export default function LandingPageWrraper(Component) {
+  return function LandingPageWrraper(props) {
+    return (
+      <>
+        <HomeSidebar />
+        <Component {...props} />
+        <Footer />
+      </>
+    );
+  };
+}

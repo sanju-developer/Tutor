@@ -3,7 +3,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -15,13 +14,7 @@ import Copyright from 'components/Copyright';
 import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 
-import {
-  FormControl,
-  FormLabel,
-  RadioGroup,
-  Radio,
-  FormHelperText,
-} from '@material-ui/core';
+import { FormHelperText } from '@material-ui/core';
 import { emailRegx } from 'utils/commonConstants';
 
 const useStyles = makeStyles(theme => ({
@@ -44,7 +37,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function SignUp({ history }) {
+function StudentSignup({ history }) {
   const signUpFormFields = {
     firstName: '',
     lastName: '',
@@ -198,49 +191,6 @@ function SignUp({ history }) {
                 )
               )}
             </Grid>
-            <Grid item xs={12}>
-              <FormControl component="fieldset">
-                <FormLabel required>Do you own an organization ?</FormLabel>
-                <RadioGroup aria-label="ownOrganization" name="ownOrganization">
-                  <FormControlLabel
-                    value="Yes"
-                    control={<Radio />}
-                    label="Yes"
-                    onClick={e => changeHandler(e)}
-                  />
-                  <FormControlLabel
-                    value="No"
-                    control={<Radio />}
-                    onClick={e => changeHandler(e)}
-                    label="No"
-                  />
-                </RadioGroup>
-              </FormControl>
-              {signUpFormState.ownOrganization.length === 0 && isError && (
-                <FormHelperText error id="component-error-text">
-                  Please select any one
-                </FormHelperText>
-              )}
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                error={signUpFormState.organizationName.length === 0 && isError}
-                defaultValue={signUpFormState.organizationName}
-                variant="outlined"
-                required
-                fullWidth
-                id="organizationName"
-                label="Organization Name"
-                name="organizationName"
-                autoComplete="Orgname"
-                onChange={e => changeHandler(e)}
-              />
-              {signUpFormState.organizationName.length === 0 && isError && (
-                <FormHelperText error id="component-error-text">
-                  Please enter your organization Name
-                </FormHelperText>
-              )}
-            </Grid>
           </Grid>
           <Button
             type="button"
@@ -274,8 +224,8 @@ function SignUp({ history }) {
   );
 }
 
-export default withRouter(SignUp);
+export default withRouter(StudentSignup);
 
-SignUp.propTypes = {
+StudentSignup.propTypes = {
   history: PropTypes.object.isRequired,
 };
