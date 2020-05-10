@@ -2,6 +2,7 @@
   "name": "tutor",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://sanju-developer.github.io/Tutor",
   "dependencies": {
     "@material-ui/core": "^4.9.12",
     "@material-ui/icons": "^4.9.1",
@@ -23,7 +24,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "gh-pages -b master -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -52,6 +54,7 @@
     "eslint-plugin-prettier": "3.1.2",
     "eslint-plugin-react": "7.18.3",
     "eslint-plugin-react-hooks": "2.4.0",
+    "gh-pages": "2.2.0",
     "prettier": "1.19.1",
     "react-app-rewired": "2.1.5"
   }

@@ -1,13 +1,6 @@
 import React from 'react'
 import LandingPageWrraper from './index'
-import {
-  Container,
-  Grid,
-  Box,
-  Typography,
-  Divider,
-  Button,
-} from '@material-ui/core'
+import { Container, Grid, Box, Typography, Button } from '@material-ui/core'
 
 function Features() {
   return (
