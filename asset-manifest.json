@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/sanju-developer/Tutor/static/css/main.c690b984.chunk.css",
+    "main.js": "/sanju-developer/Tutor/static/js/main.d0fcf53a.chunk.js",
+    "main.js.map": "/sanju-developer/Tutor/static/js/main.d0fcf53a.chunk.js.map",
+    "runtime-main.js": "/sanju-developer/Tutor/static/js/runtime-main.4b5986be.js",
+    "runtime-main.js.map": "/sanju-developer/Tutor/static/js/runtime-main.4b5986be.js.map",
+    "static/js/2.25f7c8fb.chunk.js": "/sanju-developer/Tutor/static/js/2.25f7c8fb.chunk.js",
+    "static/js/2.25f7c8fb.chunk.js.map": "/sanju-developer/Tutor/static/js/2.25f7c8fb.chunk.js.map",
+    "index.html": "/sanju-developer/Tutor/index.html",
+    "precache-manifest.242fcd416cabaabea5e2521752141730.js": "/sanju-developer/Tutor/precache-manifest.242fcd416cabaabea5e2521752141730.js",
+    "service-worker.js": "/sanju-developer/Tutor/service-worker.js",
+    "static/css/main.c690b984.chunk.css.map": "/sanju-developer/Tutor/static/css/main.c690b984.chunk.css.map",
+    "static/js/2.25f7c8fb.chunk.js.LICENSE.txt": "/sanju-developer/Tutor/static/js/2.25f7c8fb.chunk.js.LICENSE.txt",
+    "static/media/Landing.scss": "/sanju-developer/Tutor/static/media/tutor-class.ba635894.svg",
+    "static/media/SignupSignin.scss": "/sanju-developer/Tutor/static/media/signup.64467ece.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.4b5986be.js",
+    "static/js/2.25f7c8fb.chunk.js",
+    "static/css/main.c690b984.chunk.css",
+    "static/js/main.d0fcf53a.chunk.js"
+  ]
+}
