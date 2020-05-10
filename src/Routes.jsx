@@ -2,7 +2,7 @@ import React from 'react'
 import { Route, Redirect } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
-import { HashRouter, Switch } from 'react-router-dom'
+import { BrowserRouter, Switch } from 'react-router-dom'
 import Dashboard from 'screens/Dashboard'
 import { isLoggedIn } from 'utils/helperFunction'
 import StudentSignup from './screens/SignupSign/StudentSignup'
@@ -55,15 +55,9 @@ PublicRoute.propTypes = {
 
 export const Routing = () => {
   return (
-    <HashRouter>
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Switch>
-        <PublicRoute
-          restricted={false}
-          basename="/"
-          component={Home}
-          path="/"
-          exact
-        />
+        <PublicRoute restricted={false} component={Home} path="/" exact />
         <PublicRoute
           restricted={false}
           component={Pricing}
@@ -110,6 +104,6 @@ export const Routing = () => {
         />
         <PrivateRoute component={Dashboard} path="/dashboard" exact />
       </Switch>
-    </HashRouter>
+    </BrowserRouter>
   )
 }
