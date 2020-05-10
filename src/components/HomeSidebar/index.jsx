@@ -1,30 +1,30 @@
-import React from 'react';
-import clsx from 'clsx';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import ChromeReaderModeIcon from '@material-ui/icons/ChromeReaderMode';
-import HelpIcon from '@material-ui/icons/Help';
-import PeopleIcon from '@material-ui/icons/People';
-import ContactsIcon from '@material-ui/icons/Contacts';
-import AttachMoneyIcon from '@material-ui/icons/AttachMoney';
-import HomeIcon from '@material-ui/icons/Home';
-import { withRouter } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import React from 'react'
+import clsx from 'clsx'
+import { makeStyles, useTheme } from '@material-ui/core/styles'
+import Drawer from '@material-ui/core/Drawer'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import List from '@material-ui/core/List'
+import Typography from '@material-ui/core/Typography'
+import Divider from '@material-ui/core/Divider'
+import IconButton from '@material-ui/core/IconButton'
+import MenuIcon from '@material-ui/icons/Menu'
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
+import ChevronRightIcon from '@material-ui/icons/ChevronRight'
+import ListItem from '@material-ui/core/ListItem'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
+import ListItemText from '@material-ui/core/ListItemText'
+import ChromeReaderModeIcon from '@material-ui/icons/ChromeReaderMode'
+import HelpIcon from '@material-ui/icons/Help'
+import PeopleIcon from '@material-ui/icons/People'
+import ContactsIcon from '@material-ui/icons/Contacts'
+import AttachMoneyIcon from '@material-ui/icons/AttachMoney'
+import HomeIcon from '@material-ui/icons/Home'
+import { withRouter } from 'react-router-dom'
+import PropTypes from 'prop-types'
 
-const drawerWidth = 240;
+const drawerWidth = 240
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -81,20 +81,20 @@ const useStyles = makeStyles(theme => ({
     }),
     marginRight: 0,
   },
-}));
+}))
 
 function HomeSidebar({ history }) {
-  const classes = useStyles();
-  const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const classes = useStyles()
+  const theme = useTheme()
+  const [open, setOpen] = React.useState(false)
 
   const handleDrawerOpen = () => {
-    setOpen(true);
-  };
+    setOpen(true)
+  }
 
   const handleDrawerClose = () => {
-    setOpen(false);
-  };
+    setOpen(false)
+  }
 
   return (
     <div className={classes.root}>
@@ -162,7 +162,7 @@ function HomeSidebar({ history }) {
               onClick={() => history.push(text.route)}
             >
               <ListItemIcon>
-                {index === 1 ? (
+                {index === 0 ? (
                   <HomeIcon />
                 ) : index === 1 ? (
                   <ChromeReaderModeIcon />
@@ -182,11 +182,11 @@ function HomeSidebar({ history }) {
         </List>
       </Drawer>
     </div>
-  );
+  )
 }
 
-export default withRouter(HomeSidebar);
+export default withRouter(HomeSidebar)
 
 HomeSidebar.propTypes = {
   history: PropTypes.object.isRequired,
-};
+}

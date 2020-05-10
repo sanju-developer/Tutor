@@ -1,15 +1,15 @@
-import React from 'react';
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
-import Grid from '@material-ui/core/Grid';
-import StarIcon from '@material-ui/icons/StarBorder';
-import Typography from '@material-ui/core/Typography';
-import Container from '@material-ui/core/Container';
-import { LandingPageCommonCss } from 'utils/commonStyle/landingPageCommonCss';
-import LandingPageWrraper from '.';
+import React from 'react'
+import Button from '@material-ui/core/Button'
+import Card from '@material-ui/core/Card'
+import CardActions from '@material-ui/core/CardActions'
+import CardContent from '@material-ui/core/CardContent'
+import CardHeader from '@material-ui/core/CardHeader'
+import Grid from '@material-ui/core/Grid'
+import StarIcon from '@material-ui/icons/StarBorder'
+import Typography from '@material-ui/core/Typography'
+import Container from '@material-ui/core/Container'
+import { LandingPageCommonCss } from 'utils/commonStyle/landingPageCommonCss'
+import LandingPageWrraper from '.'
 
 const tiers = [
   {
@@ -49,13 +49,16 @@ const tiers = [
     buttonText: 'Contact us',
     buttonVariant: 'outlined',
   },
-];
+]
 
 function Pricing() {
-  const classes = LandingPageCommonCss();
+  const classes = LandingPageCommonCss()
   return (
     <>
       <Container maxWidth="sm" component="main" className={classes.heroContent}>
+        <h1>
+          <span>Pricing</span>
+        </h1>
         <Typography
           component="h1"
           variant="h2"
@@ -134,7 +137,7 @@ function Pricing() {
         </Grid>
       </Container>
     </>
-  );
+  )
 }
 
-export default LandingPageWrraper(Pricing);
+export default LandingPageWrraper(Pricing)

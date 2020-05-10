@@ -1,19 +1,20 @@
-import React, { useState, useEffect } from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import Copyright from 'components/Copyright';
-import { withRouter } from 'react-router';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect } from 'react'
+import Avatar from '@material-ui/core/Avatar'
+import Button from '@material-ui/core/Button'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import TextField from '@material-ui/core/TextField'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
+import Link from '@material-ui/core/Link'
+import Grid from '@material-ui/core/Grid'
+import Box from '@material-ui/core/Box'
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
+import Typography from '@material-ui/core/Typography'
+import { makeStyles } from '@material-ui/core/styles'
+import Container from '@material-ui/core/Container'
+import Copyright from 'components/Copyright'
+import { withRouter } from 'react-router'
+import PropTypes from 'prop-types'
+import '../SignupSignin.scss'
 
 import {
   FormControl,
@@ -21,8 +22,8 @@ import {
   RadioGroup,
   Radio,
   FormHelperText,
-} from '@material-ui/core';
-import { emailRegx } from 'utils/commonConstants';
+} from '@material-ui/core'
+import { emailRegx } from 'utils/commonConstants'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -42,7 +43,7 @@ const useStyles = makeStyles(theme => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
-}));
+}))
 
 function TutorSignup({ history }) {
   const signUpFormFields = {
@@ -52,21 +53,21 @@ function TutorSignup({ history }) {
     password: '',
     organizationName: '',
     ownOrganization: '',
-  };
-  const [signUpFormState, setSignUpFormState] = useState(signUpFormFields);
-  const [isError, setIsError] = useState(false);
-  const [isEmailValid, setIsEmailValid] = useState(false);
+  }
+  const [signUpFormState, setSignUpFormState] = useState(signUpFormFields)
+  const [isError, setIsError] = useState(false)
+  const [isEmailValid, setIsEmailValid] = useState(false)
 
-  const classes = useStyles();
+  const classes = useStyles()
 
   const changeHandler = event => {
-    event.stopPropagation();
-    const { name, value } = event.target;
+    event.stopPropagation()
+    const { name, value } = event.target
     setSignUpFormState({
       ...signUpFormState,
       [name]: value,
-    });
-  };
+    })
+  }
 
   useEffect(() => {
     if (
@@ -77,13 +78,13 @@ function TutorSignup({ history }) {
       signUpFormState.password.length === 6 &&
       signUpFormState.ownOrganization.length !== 0
     ) {
-      setIsError(false);
+      setIsError(false)
     }
     if (emailRegx.test(signUpFormState.email)) {
-      setIsEmailValid(false);
-    } else setIsEmailValid(true);
+      setIsEmailValid(false)
+    } else setIsEmailValid(true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [signUpFormState, isEmailValid]);
+  }, [signUpFormState, isEmailValid])
 
   const submitRegisterForm = () => {
     if (
@@ -94,11 +95,11 @@ function TutorSignup({ history }) {
       signUpFormState.password.length !== 6 ||
       signUpFormState.ownOrganization.length === 0
     ) {
-      setIsError(true);
+      setIsError(true)
     } else {
       // setIsError(false);
     }
-  };
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -249,7 +250,7 @@ function TutorSignup({ history }) {
             color="primary"
             className={classes.submit}
             onClick={() => {
-              submitRegisterForm();
+              submitRegisterForm()
             }}
           >
             Sign Up
@@ -270,12 +271,13 @@ function TutorSignup({ history }) {
       <Box mt={5}>
         <Copyright />
       </Box>
+      <Box className="tutor-signup-div" />
     </Container>
-  );
+  )
 }
 
-export default withRouter(TutorSignup);
+export default withRouter(TutorSignup)
 
 TutorSignup.propTypes = {
   history: PropTypes.object.isRequired,
-};
+}

@@ -1,0 +1,96 @@
+@import '../../assets/color.scss';
+
+h1 {
+  span {
+    border-bottom: 1px solid #000;
+    padding-bottom: 4px;
+    width: auto;
+  }
+}
+.support-div {
+  background-color: rgba(255, 166, 0, 0.2);
+  background-image: url('../../assets/images/support.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.contact-div {
+  background-color: rgba(102, 81, 145, 0.2);
+  background-image: url('../../assets/images/contact.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.team-container {
+  position: relative;
+
+  .MuiAvatar-root {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin: auto;
+    top: 70px;
+    z-index: 9;
+    border: 2px solid #000;
+  }
+  .MuiTypography-paragraph {
+    padding: 16px;
+    padding-top: 50px;
+  }
+  .profile-card {
+    position: relative;
+    background-image: url('../../assets/images/team.svg');
+    background-position: top;
+    background-repeat: no-repeat;
+    background-size: cover;
+    .avatar-1 {
+      color: #fff;
+      background-color: rgba(160, 81, 149, 0.8);
+    }
+    .avatar-2 {
+      color: #fff;
+      background-color: rgba(212, 80, 135, 0.8);
+    }
+    .avatar-3 {
+      color: #fff;
+      background-color: rgba(249, 93, 106, 0.8);
+    }
+  }
+}
+
+.features {
+  .img-props {
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+  .tutor-class-feature {
+    background-image: url('../../assets/images/tutor-class.svg');
+  }
+  .student-class-feature {
+    background-image: url('../../assets/images/student-class.svg');
+  }
+  .secure-class-feature {
+    background-image: url('../../assets/images/security.svg');
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .support-div {
+    .makeStyles-root-147 {
+      width: auto;
+    }
+  }
+  .features {
+    .img-props {
+      margin: auto;
+      width: 250px;
+      height: 250px;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: contain;
+    }
+  }
+}

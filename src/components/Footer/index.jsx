@@ -1,6 +1,6 @@
-import React from 'react';
-import { Container, Grid, Typography, Link } from '@material-ui/core';
-import { LandingPageCommonCss } from 'utils/commonStyle/landingPageCommonCss';
+import React from 'react'
+import { Container, Grid, Typography, Link } from '@material-ui/core'
+import { LandingPageCommonCss } from 'utils/commonStyle/landingPageCommonCss'
 
 const footers = [
   {
@@ -18,22 +18,17 @@ const footers = [
     ],
   },
   {
-    title: 'Resources',
-    description: [
-      'Resource',
-      'Resource name',
-      'Another resource',
-      'Final resource',
-    ],
+    title: 'Pricing',
+    description: ['Pro', 'Free', 'Enterprise'],
   },
   {
     title: 'Legal',
     description: ['Privacy policy', 'Terms of use'],
   },
-];
+]
 
 function Footer() {
-  const classes = LandingPageCommonCss();
+  const classes = LandingPageCommonCss()
   return (
     <Container maxWidth="md" component="footer" className={classes.footer}>
       <Grid container spacing={4} justify="space-evenly">
@@ -55,7 +50,7 @@ function Footer() {
         ))}
       </Grid>
     </Container>
-  );
+  )
 }
 
-export default Footer;
+export default Footer
