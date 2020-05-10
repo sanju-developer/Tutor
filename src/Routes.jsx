@@ -57,7 +57,13 @@ export const Routing = () => {
   return (
     <HashRouter>
       <Switch>
-        <PublicRoute restricted={false} component={Home} path="/" exact />
+        <PublicRoute
+          restricted={false}
+          basename="/"
+          component={Home}
+          path="/"
+          exact
+        />
         <PublicRoute
           restricted={false}
           component={Pricing}
