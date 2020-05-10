@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/tutor/static/css/main.18f21244.chunk.css",
+    "main.js": "/tutor/static/js/main.f8db4027.chunk.js",
+    "main.js.map": "/tutor/static/js/main.f8db4027.chunk.js.map",
+    "runtime-main.js": "/tutor/static/js/runtime-main.eb0b349c.js",
+    "runtime-main.js.map": "/tutor/static/js/runtime-main.eb0b349c.js.map",
+    "static/js/2.25f7c8fb.chunk.js": "/tutor/static/js/2.25f7c8fb.chunk.js",
+    "static/js/2.25f7c8fb.chunk.js.map": "/tutor/static/js/2.25f7c8fb.chunk.js.map",
+    "index.html": "/tutor/index.html",
+    "precache-manifest.628ca35d44b4f93d7196c5ee792946db.js": "/tutor/precache-manifest.628ca35d44b4f93d7196c5ee792946db.js",
+    "service-worker.js": "/tutor/service-worker.js",
+    "static/css/main.18f21244.chunk.css.map": "/tutor/static/css/main.18f21244.chunk.css.map",
+    "static/js/2.25f7c8fb.chunk.js.LICENSE.txt": "/tutor/static/js/2.25f7c8fb.chunk.js.LICENSE.txt",
+    "static/media/Landing.scss": "/tutor/static/media/tutor-class.ba635894.svg",
+    "static/media/SignupSignin.scss": "/tutor/static/media/signup.64467ece.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.eb0b349c.js",
+    "static/js/2.25f7c8fb.chunk.js",
+    "static/css/main.18f21244.chunk.css",
+    "static/js/main.f8db4027.chunk.js"
+  ]
+}
