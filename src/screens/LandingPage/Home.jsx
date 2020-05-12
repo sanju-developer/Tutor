@@ -8,18 +8,24 @@ import Icons from 'components/Icons'
 
 const Home = ({ history }) => {
   const [open, setOpen] = React.useState(false)
+  const [whichButtonClick, setWhichButtonClick] = React.useState(null)
   const [selectedValue, setSelectedValue] = React.useState(null)
 
-  const handleClickOpen = () => {
+  const handleClickOpen = buttonType => {
+    setWhichButtonClick(buttonType)
     setOpen(true)
   }
 
   const handleClose = value => {
     setOpen(false)
     setSelectedValue(value)
-    if (value === 'Student') {
-      history.push('/student-signup')
-    } else if (value === 'Tutor') history.push('/tutor-signup')
+    if (whichButtonClick === 'signup') {
+      if (value === 'Student') {
+        history.push('/student-signup')
+      } else if (value === 'Tutor') history.push('/tutor-signup')
+    } else {
+      history.push('/signin')
+    }
   }
   return (
     <Container>
@@ -51,7 +57,7 @@ const Home = ({ history }) => {
             <Button
               variant="outlined"
               color="secondary"
-              onClick={handleClickOpen}
+              onClick={() => handleClickOpen('signup')}
             >
               Sign up
             </Button>
@@ -60,7 +66,7 @@ const Home = ({ history }) => {
             <Button
               variant="outlined"
               color="primary"
-              onClick={() => history.push('/signin')}
+              onClick={() => handleClickOpen('signIn')}
             >
               Sign in
             </Button>
