@@ -10,6 +10,8 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import Dialog from '@material-ui/core/Dialog'
 import PersonIcon from '@material-ui/icons/Person'
 import { blue } from '@material-ui/core/colors'
+import { connect } from 'react-redux'
+import { SetUserRole } from 'redux/actions/userRoleAction'
 
 const useStyles = makeStyles({
   avatar: {
@@ -28,6 +30,7 @@ function GetStartedDialog(props) {
   }
 
   const handleListItemClick = value => {
+    SetUserRole(value)
     onClose(value)
   }
 
@@ -54,10 +57,16 @@ function GetStartedDialog(props) {
   )
 }
 
+const mapDispatchToProps = dispatch => {
+  return {
+    signinAsStudent: userRole => dispatch(SetUserRole(userRole)),
+  }
+}
+
 GetStartedDialog.propTypes = {
   onClose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
   selectedValue: PropTypes.string.isRequired,
 }
 
-export default GetStartedDialog
+export default connect(null, mapDispatchToProps)(GetStartedDialog)

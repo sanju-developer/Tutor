@@ -18,8 +18,9 @@ import { emailRegx } from 'utils/commonConstants'
 import { FormHelperText } from '@material-ui/core'
 import GetStartedDialog from 'components/Dialog/GetStartedDialog'
 import { connect } from 'react-redux'
-import { SignInService } from 'services/signIn'
 import { commonApiAction } from 'redux/actions/commonApiAction'
+import { SignInServiceForStudent, SignInServiceForTutor } from 'services/signIn'
+import { EntryAsOwner } from 'utils/commonConstants'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -41,7 +42,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-function SignIn({ history }) {
+function SignIn({ history, signinAsTutor, signinAsStudent }) {
   const [open, setOpen] = React.useState(false)
   const [selectedValue, setSelectedValue] = React.useState(null)
 
@@ -97,8 +98,11 @@ function SignIn({ history }) {
     ) {
       setIsError(true)
     } else {
-      localStorage.setItem('token', 'qwerty')
-      history.push('/dashboard')
+      // singinAs === EntryAsOwner
+      //   ? signinAsTutor(signInFormState)
+      //   : signinAsStudent(signInFormState)
+      // localStorage.setItem('token', 'qwerty')
+      // history.push('/dashboard')
       // setIsError(false);
     }
   }
@@ -214,14 +218,19 @@ function SignIn({ history }) {
 }
 
 const mapStateToProps = state => {
+  console.log(state)
+
   return {
-    isApiLoading: state.login.isApiLoading,
+    // isApiLoading: state.login.isApiLoading,
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    signin: body => dispatch(commonApiAction(SignInService)(body)),
+    signinAsStudent: body =>
+      dispatch(commonApiAction(SignInServiceForStudent)(body)),
+    signinAsTutor: body =>
+      dispatch(commonApiAction(SignInServiceForTutor)(body)),
   }
 }
 
@@ -229,4 +238,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(SignIn)
 
 SignIn.propTypes = {
   history: PropTypes.object.isRequired,
+  signinAsTutor: PropTypes.func.isRequired,
+  signinAsStudent: PropTypes.func.isRequired,
 }

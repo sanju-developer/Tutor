@@ -10,4 +10,6 @@ export const apiCommonActionType = {
 }
 
 // aaction types other than common actions
-export const actionTypes = {}
+export const actionTypes = {
+  USER_ROLE: 'USER_ROLE',
+}

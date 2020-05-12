@@ -1,17 +1,11 @@
 import { endpoints } from 'api/endpoint'
-import { httpMethods, EntryAsOwner } from 'utils/commonConstants'
+import { httpMethods } from 'utils/commonConstants'
 import { api } from 'api/api'
 
-export const SignInService = (signInAs, data) => {
-  return api(
-    `${
-      signInAs === EntryAsOwner
-        ? endpoints.tutor_signup
-        : endpoints.student_login
-    }`,
-    httpMethods.POST,
-    data,
-    null,
-    null
-  )
+export const SignInServiceForStudent = data => {
+  return api(`${endpoints.student_login}`, httpMethods.POST, data, null, null)
+}
+
+export const SignInServiceForTutor = data => {
+  return api(`${endpoints.tutor_login}`, httpMethods.POST, data, null, null)
 }
