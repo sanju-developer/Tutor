@@ -1,8 +1,8 @@
-import { apiCommonActionType } from 'redux/constants'
 import store from 'redux/store'
-import { errorStatusCode } from 'utils/errorStatusCode'
 import { commonActionCreator } from './commonActionCreator'
-import { ErrorReducerName } from 'redux/constants'
+import { apiCommonActionType } from '../constants/actionTypeName'
+import { ErrorReducerName } from '../constants/reducerNames'
+import { errorStatusCode } from 'utils/errorStatusCodes'
 
 export const commonServiceAction = serviceName => async (
   data,

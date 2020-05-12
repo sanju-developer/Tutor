@@ -6,7 +6,7 @@ export const apiCommonActionType = {
   clearData: 'CLEAR_DATA',
   clearError: 'CLEAR_ERROR',
   internalServerError: 'INTERNAL_SERVER_ERROR',
-  clearInternalServerError: 'CLEAR_INTERNAL_SERVER_ERROR'
+  clearInternalServerError: 'CLEAR_INTERNAL_SERVER_ERROR',
 }
 
 // aaction types other than common actions

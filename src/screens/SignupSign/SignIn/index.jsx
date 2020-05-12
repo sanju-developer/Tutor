@@ -17,6 +17,9 @@ import PropTypes from 'prop-types'
 import { emailRegx } from 'utils/commonConstants'
 import { FormHelperText } from '@material-ui/core'
 import GetStartedDialog from 'components/Dialog/GetStartedDialog'
+import { connect } from 'react-redux'
+import { SignInService } from 'services/signIn'
+import { commonApiAction } from 'redux/actions/commonApiAction'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -38,7 +41,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-export default function SignIn({ history }) {
+function SignIn({ history }) {
   const [open, setOpen] = React.useState(false)
   const [selectedValue, setSelectedValue] = React.useState(null)
 
@@ -209,6 +212,20 @@ export default function SignIn({ history }) {
     </Container>
   )
 }
+
+const mapStateToProps = state => {
+  return {
+    isApiLoading: state.login.isApiLoading,
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    signin: body => dispatch(commonApiAction(SignInService)(body)),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignIn)
 
 SignIn.propTypes = {
   history: PropTypes.object.isRequired,

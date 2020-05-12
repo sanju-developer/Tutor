@@ -1,3 +1,3 @@
 export const errorStatusCode = {
-  internalServerErrorCode: 500
+  internalServerErrorCode: 500,
 }

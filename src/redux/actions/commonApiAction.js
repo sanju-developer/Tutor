@@ -1,7 +1,7 @@
-import { apiCommonActionType } from 'redux/constants'
-import { createQueryParams } from 'utils/helperFunctions'
 import { commonActionCreator } from './commonActionCreator'
 import { commonServiceAction } from './commonServiceAction'
+import { apiCommonActionType } from '../constants/actionTypeName'
+import { createQueryParams } from 'utils/helperFunction'
 
 export const commonApiAction = service => (
   reducerName,

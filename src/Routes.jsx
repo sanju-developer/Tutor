@@ -55,7 +55,7 @@ PublicRoute.propTypes = {
 
 export const Routing = () => {
   return (
-    <BrowserRouter basename={process.env.PUBLIC_URL}>
+    <BrowserRouter>
       <Switch>
         <PublicRoute restricted={false} component={Home} path="/" exact />
         <PublicRoute

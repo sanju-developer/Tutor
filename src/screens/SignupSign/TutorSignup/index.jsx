@@ -14,6 +14,7 @@ import Container from '@material-ui/core/Container'
 import Copyright from 'components/Copyright'
 import { withRouter } from 'react-router'
 import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
 import '../SignupSignin.scss'
 
 import {
@@ -45,14 +46,14 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-function TutorSignup({ history }) {
+function TutorSignup({ history, tutorSignup }) {
   const signUpFormFields = {
     firstName: '',
     lastName: '',
     email: '',
     password: '',
-    organizationName: '',
-    ownOrganization: '',
+    organisationName: '',
+    tutorType: '',
   }
   const [signUpFormState, setSignUpFormState] = useState(signUpFormFields)
   const [isError, setIsError] = useState(false)
@@ -73,10 +74,10 @@ function TutorSignup({ history }) {
     if (
       signUpFormState.email.length !== 0 &&
       signUpFormState.firstName.length !== 0 &&
-      signUpFormState.organizationName.length !== 0 &&
+      signUpFormState.organisationName.length !== 0 &&
       signUpFormState.password.length !== 0 &&
       signUpFormState.password.length === 6 &&
-      signUpFormState.ownOrganization.length !== 0
+      signUpFormState.tutorType.length !== 0
     ) {
       setIsError(false)
     }
@@ -90,14 +91,17 @@ function TutorSignup({ history }) {
     if (
       signUpFormState.email.length === 0 ||
       signUpFormState.firstName.length === 0 ||
-      signUpFormState.organizationName.length === 0 ||
+      signUpFormState.organisationName.length === 0 ||
       signUpFormState.password.length === 0 ||
       signUpFormState.password.length !== 6 ||
-      signUpFormState.ownOrganization.length === 0
+      signUpFormState.tutorType.length === 0
     ) {
       setIsError(true)
     } else {
-      // setIsError(false);
+      signUpFormState.tutorType === 'Yes'
+        ? (signUpFormState.tutorType = 'owner')
+        : (signUpFormState.tutorType = 'tutor')
+      // tutorSignup(signUpFormState)
     }
   }
 
@@ -202,7 +206,7 @@ function TutorSignup({ history }) {
             <Grid item xs={12}>
               <FormControl component="fieldset">
                 <FormLabel required>Do you own an organization ?</FormLabel>
-                <RadioGroup aria-label="ownOrganization" name="ownOrganization">
+                <RadioGroup aria-label="tutorType" name="tutorType">
                   <FormControlLabel
                     value="Yes"
                     control={<Radio />}
@@ -217,7 +221,7 @@ function TutorSignup({ history }) {
                   />
                 </RadioGroup>
               </FormControl>
-              {signUpFormState.ownOrganization.length === 0 && isError && (
+              {signUpFormState.tutorType.length === 0 && isError && (
                 <FormHelperText error id="component-error-text">
                   Please select any one
                 </FormHelperText>
@@ -225,18 +229,18 @@ function TutorSignup({ history }) {
             </Grid>
             <Grid item xs={12}>
               <TextField
-                error={signUpFormState.organizationName.length === 0 && isError}
-                defaultValue={signUpFormState.organizationName}
+                error={signUpFormState.organisationName.length === 0 && isError}
+                defaultValue={signUpFormState.organisationName}
                 variant="outlined"
                 required
                 fullWidth
-                id="organizationName"
+                id="organisationName"
                 label="Organization Name"
-                name="organizationName"
+                name="organisationName"
                 autoComplete="Orgname"
                 onChange={e => changeHandler(e)}
               />
-              {signUpFormState.organizationName.length === 0 && isError && (
+              {signUpFormState.organisationName.length === 0 && isError && (
                 <FormHelperText error id="component-error-text">
                   Please enter your organization Name
                 </FormHelperText>
@@ -276,8 +280,24 @@ function TutorSignup({ history }) {
   )
 }
 
-export default withRouter(TutorSignup)
+const mapStateToProps = state => {
+  return {
+    isApiLoading: state.signup.isApiLoading,
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    tutorSignup: () => dispatch(),
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(TutorSignup))
 
 TutorSignup.propTypes = {
   history: PropTypes.object.isRequired,
+  tutorSignup: PropTypes.func.isRequired,
 }
