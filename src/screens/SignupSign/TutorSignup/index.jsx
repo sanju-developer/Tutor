@@ -238,7 +238,8 @@ function TutorSignup({ history, tutorSignup, isApiLoading }) {
               )}
             </Grid>
             {(signUpFormState.tutorType === 'Yes' ||
-              signUpFormState.organisationName.length !== 0) && (
+              signUpFormState.tutorType === 'teacher' ||
+              signUpFormState.tutorType === 'owner') && (
               <Grid item xs={12}>
                 <TextField
                   error={
