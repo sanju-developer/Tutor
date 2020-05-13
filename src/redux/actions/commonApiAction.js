@@ -10,9 +10,12 @@ export const commonApiAction = service => (
   urlPathParams
 ) => {
   return async dispatch => {
-    dispatch(commonActionCreator(reducerName)(apiCommonActionType.isLoading))
+    dispatch(
+      commonActionCreator(reducerName)(apiCommonActionType.isLoading, null)
+    )
     const updatedQuerryparams = createQueryParams(queryParams)
     const response = await commonServiceAction(service)(
+      reducerName,
       data,
       updatedQuerryparams,
       urlPathParams
@@ -27,7 +30,10 @@ export const commonApiAction = service => (
         )
       } catch (error) {
         dispatch(
-          commonActionCreator(reducerName)(apiCommonActionType.setError, error)
+          commonActionCreator(reducerName)(
+            apiCommonActionType.setError,
+            error.response.data
+          )
         )
       }
     }
