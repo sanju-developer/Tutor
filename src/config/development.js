@@ -1,5 +1,5 @@
 const API = {
-  BASE_URL: 'https://smarttutor.herokuapp.com/',
+  BASE_URL: 'http://6e75ec16.ngrok.io/',
 }
 
 const DEV_TOOLS = {

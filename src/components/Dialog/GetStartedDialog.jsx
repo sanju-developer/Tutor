@@ -23,14 +23,14 @@ const useStyles = makeStyles({
 function GetStartedDialog(props) {
   const emails = ['Student', 'Tutor']
   const classes = useStyles()
-  const { onClose, selectedValue, open } = props
+  const { onClose, selectedValue, open, setUserRole } = props
 
   const handleClose = () => {
     onClose(selectedValue)
   }
 
   const handleListItemClick = value => {
-    SetUserRole(value)
+    setUserRole(value)
     onClose(value)
   }
 
@@ -59,12 +59,13 @@ function GetStartedDialog(props) {
 
 const mapDispatchToProps = dispatch => {
   return {
-    signinAsStudent: userRole => dispatch(SetUserRole(userRole)),
+    setUserRole: userRole => dispatch(SetUserRole(userRole)),
   }
 }
 
 GetStartedDialog.propTypes = {
   onClose: PropTypes.func.isRequired,
+  setUserRole: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
   selectedValue: PropTypes.string.isRequired,
 }

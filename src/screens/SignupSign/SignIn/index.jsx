@@ -42,7 +42,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-function SignIn({ history, signinAsTutor, signinAsStudent }) {
+function SignIn({ history, singinAs, signinAsTutor, signinAsStudent }) {
   const [open, setOpen] = React.useState(false)
   const [selectedValue, setSelectedValue] = React.useState(null)
 
@@ -98,11 +98,11 @@ function SignIn({ history, signinAsTutor, signinAsStudent }) {
     ) {
       setIsError(true)
     } else {
-      // singinAs === EntryAsOwner
-      //   ? signinAsTutor(signInFormState)
-      //   : signinAsStudent(signInFormState)
-      // localStorage.setItem('token', 'qwerty')
-      // history.push('/dashboard')
+      singinAs === EntryAsOwner
+        ? signinAsTutor(signInFormState)
+        : signinAsStudent(signInFormState)
+      localStorage.setItem('token', 'qwerty')
+      history.push('/dashboard')
       // setIsError(false);
     }
   }
@@ -218,8 +218,11 @@ function SignIn({ history, signinAsTutor, signinAsStudent }) {
 }
 
 const mapStateToProps = state => {
+  console.log(state)
+
   return {
     // isApiLoading: state.login.isApiLoading,
+    singinAs: state.userRole.userRole,
   }
 }
 
@@ -236,6 +239,11 @@ export default connect(mapStateToProps, mapDispatchToProps)(SignIn)
 
 SignIn.propTypes = {
   history: PropTypes.object.isRequired,
+  singinAs: PropTypes.string,
   signinAsTutor: PropTypes.func.isRequired,
   signinAsStudent: PropTypes.func.isRequired,
+}
+
+SignIn.defaultProps = {
+  singinAs: null,
 }

@@ -23,8 +23,12 @@ import {
   RadioGroup,
   Radio,
   FormHelperText,
+  LinearProgress,
 } from '@material-ui/core'
 import { emailRegx } from 'utils/commonConstants'
+import { SignupServiceForTutor } from 'services/tutorSignup'
+import { commonApiAction } from 'redux/actions/commonApiAction'
+import { TutorSignupReducerName } from 'redux/constants/reducerNames'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -46,7 +50,7 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-function TutorSignup({ history, tutorSignup }) {
+function TutorSignup({ history, tutorSignup, isApiLoading }) {
   const signUpFormFields = {
     firstName: '',
     lastName: '',
@@ -91,24 +95,31 @@ function TutorSignup({ history, tutorSignup }) {
     if (
       signUpFormState.email.length === 0 ||
       signUpFormState.firstName.length === 0 ||
-      signUpFormState.organisationName.length === 0 ||
       signUpFormState.password.length === 0 ||
       signUpFormState.password.length !== 6 ||
       signUpFormState.tutorType.length === 0
+    ) {
+      setIsError(true)
+    } else if (
+      signUpFormState.tutorType === 'Yes' &&
+      signUpFormState.organisationName.length === 0
     ) {
       setIsError(true)
     } else {
       signUpFormState.tutorType === 'Yes'
         ? (signUpFormState.tutorType = 'owner')
         : (signUpFormState.tutorType = 'tutor')
-
-      console.log(signUpFormState)
-      // tutorSignup(signUpFormState)
+      tutorSignup(signUpFormState)
     }
   }
 
   return (
     <Container component="main" maxWidth="xs">
+      {isApiLoading && (
+        <Box className="show-loader">
+          <LinearProgress />
+        </Box>
+      )}
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -288,13 +299,16 @@ function TutorSignup({ history, tutorSignup }) {
 
 const mapStateToProps = state => {
   return {
-    // isApiLoading: state.signup.isApiLoading,
+    isApiLoading: state.tutorSignup.isApiLoading,
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    tutorSignup: () => dispatch(),
+    tutorSignup: body =>
+      dispatch(
+        commonApiAction(SignupServiceForTutor)(TutorSignupReducerName, body)
+      ),
   }
 }
 
@@ -304,6 +318,7 @@ export default connect(
 )(withRouter(TutorSignup))
 
 TutorSignup.propTypes = {
+  isApiLoading: PropTypes.bool.isRequired,
   history: PropTypes.object.isRequired,
   tutorSignup: PropTypes.func.isRequired,
 }
