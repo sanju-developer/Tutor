@@ -29,6 +29,7 @@ import { SignupServiceForTutor } from 'services/tutorSignup'
 import { commonApiAction } from 'redux/actions/commonApiAction'
 import { TutorSignupReducerName } from 'redux/constants/reducerNames'
 import Loader from 'components/Loaders/inedx'
+import { removeEmptyKeyFromObject } from 'utils/helperFunction'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -96,7 +97,7 @@ function TutorSignup({ history, tutorSignup, isApiLoading }) {
       signUpFormState.email.length === 0 ||
       signUpFormState.firstName.length === 0 ||
       signUpFormState.password.length === 0 ||
-      signUpFormState.password.length !== 6 ||
+      signUpFormState.password.length !== 8 ||
       signUpFormState.tutorType.length === 0
     ) {
       setIsError(true)
@@ -109,7 +110,8 @@ function TutorSignup({ history, tutorSignup, isApiLoading }) {
       signUpFormState.tutorType === 'Yes'
         ? (signUpFormState.tutorType = 'owner')
         : (signUpFormState.tutorType = 'teacher')
-      tutorSignup(signUpFormState)
+
+      tutorSignup(removeEmptyKeyFromObject({ ...signUpFormState }))
     }
   }
 
@@ -181,7 +183,7 @@ function TutorSignup({ history, tutorSignup, isApiLoading }) {
               <TextField
                 error={
                   (signUpFormState.email.length === 0 ||
-                    signUpFormState.password.length !== 6) &&
+                    signUpFormState.password.length !== 8) &&
                   isError
                 }
                 onChange={e => changeHandler(e)}
@@ -195,7 +197,7 @@ function TutorSignup({ history, tutorSignup, isApiLoading }) {
                 id="password"
                 autoComplete="current-password"
                 inputProps={{
-                  maxLength: 6,
+                  maxLength: 8,
                 }}
               />
               {signUpFormState.password.length === 0 && isError ? (
@@ -203,10 +205,10 @@ function TutorSignup({ history, tutorSignup, isApiLoading }) {
                   Please enter your password
                 </FormHelperText>
               ) : (
-                signUpFormState.password.length < 6 &&
+                signUpFormState.password.length < 8 &&
                 isError && (
                   <FormHelperText error id="component-error-text">
-                    Please enter minimum 6 length password
+                    Please enter minimum 8 length password
                   </FormHelperText>
                 )
               )}
@@ -235,7 +237,8 @@ function TutorSignup({ history, tutorSignup, isApiLoading }) {
                 </FormHelperText>
               )}
             </Grid>
-            {signUpFormState.tutorType === 'Yes' && (
+            {(signUpFormState.tutorType === 'Yes' ||
+              signUpFormState.organisationName.length !== 0) && (
               <Grid item xs={12}>
                 <TextField
                   error={

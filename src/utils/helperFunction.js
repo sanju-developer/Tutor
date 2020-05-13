@@ -208,20 +208,6 @@ export const getQueryForFilters = ({
   }
   return queryObj
 }
-export function addIsCheckedKeyToEachObjectToArray(oldArray) {
-  const addIsCheckedKeyToEachObjectToPermissionArray = oldArray.map(item => {
-    item[item.name] = false
-    return item
-  })
-  return addIsCheckedKeyToEachObjectToPermissionArray
-}
-export function addcheckedKeyToEachObjectToArray(oldArray) {
-  const addIsCheckedKeyToEachObjectToPermissionArray = oldArray.map(item => {
-    item.checked = false
-    return item
-  })
-  return addIsCheckedKeyToEachObjectToPermissionArray
-}
 // Create queryparams
 export function queryParams(queryParamString) {
   let params = {}
@@ -235,12 +221,13 @@ export function queryParams(queryParamString) {
   }
   return params
 }
-export function ReplaceSpaceWithBackSpace() {
-  return / /g
-}
-export function onScrollToBottomInVirtualScrollList(data) {
-  const bottom =
-    parseInt(data.scrollHeight) - parseInt(data.scrollTop) ===
-    parseInt(data.clientHeight)
-  return bottom
+
+export const removeEmptyKeyFromObject = object => {
+  for (const key in object) {
+    if (object[key].length === 0) {
+      delete object[key]
+    }
+  }
+
+  return object
 }
