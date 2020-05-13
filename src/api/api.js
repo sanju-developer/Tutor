@@ -58,7 +58,7 @@ export const api = (
   const apiParameter = {
     method: apiMethod,
     url: API.BASE_URL + endpoint,
-    withCredentials: true,
+    // withCredentials: true,
     timeout: 1000 * 120, // Wait for 120 seconds
   }
   // get refreshToken and accessToken in session storage, inorder to prevent sideffect on page reload

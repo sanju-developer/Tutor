@@ -108,7 +108,7 @@ function TutorSignup({ history, tutorSignup, isApiLoading }) {
     } else {
       signUpFormState.tutorType === 'Yes'
         ? (signUpFormState.tutorType = 'owner')
-        : (signUpFormState.tutorType = 'tutor')
+        : (signUpFormState.tutorType = 'teacher')
       tutorSignup(signUpFormState)
     }
   }
