@@ -23,12 +23,12 @@ import {
   RadioGroup,
   Radio,
   FormHelperText,
-  LinearProgress,
 } from '@material-ui/core'
 import { emailRegx } from 'utils/commonConstants'
 import { SignupServiceForTutor } from 'services/tutorSignup'
 import { commonApiAction } from 'redux/actions/commonApiAction'
 import { TutorSignupReducerName } from 'redux/constants/reducerNames'
+import Loader from 'components/Loaders/inedx'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -115,11 +115,6 @@ function TutorSignup({ history, tutorSignup, isApiLoading }) {
 
   return (
     <Container component="main" maxWidth="xs">
-      {isApiLoading && (
-        <Box className="show-loader">
-          <LinearProgress />
-        </Box>
-      )}
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
@@ -269,12 +264,13 @@ function TutorSignup({ history, tutorSignup, isApiLoading }) {
             fullWidth
             variant="contained"
             color="primary"
+            disabled={isApiLoading}
             className={classes.submit}
             onClick={() => {
               submitRegisterForm()
             }}
           >
-            Sign Up
+            {isApiLoading ? <Loader type="circularLoader" /> : 'Sign Up'}
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
