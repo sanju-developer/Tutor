@@ -218,8 +218,6 @@ function SignIn({ history, signinAsTutor, signinAsStudent }) {
 }
 
 const mapStateToProps = state => {
-  console.log(state)
-
   return {
     // isApiLoading: state.login.isApiLoading,
   }

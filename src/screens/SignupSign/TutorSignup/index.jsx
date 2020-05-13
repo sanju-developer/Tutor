@@ -101,6 +101,8 @@ function TutorSignup({ history, tutorSignup }) {
       signUpFormState.tutorType === 'Yes'
         ? (signUpFormState.tutorType = 'owner')
         : (signUpFormState.tutorType = 'tutor')
+
+      console.log(signUpFormState)
       // tutorSignup(signUpFormState)
     }
   }
@@ -227,25 +229,29 @@ function TutorSignup({ history, tutorSignup }) {
                 </FormHelperText>
               )}
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                error={signUpFormState.organisationName.length === 0 && isError}
-                defaultValue={signUpFormState.organisationName}
-                variant="outlined"
-                required
-                fullWidth
-                id="organisationName"
-                label="Organization Name"
-                name="organisationName"
-                autoComplete="Orgname"
-                onChange={e => changeHandler(e)}
-              />
-              {signUpFormState.organisationName.length === 0 && isError && (
-                <FormHelperText error id="component-error-text">
-                  Please enter your organization Name
-                </FormHelperText>
-              )}
-            </Grid>
+            {signUpFormState.tutorType === 'Yes' && (
+              <Grid item xs={12}>
+                <TextField
+                  error={
+                    signUpFormState.organisationName.length === 0 && isError
+                  }
+                  defaultValue={signUpFormState.organisationName}
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="organisationName"
+                  label="Organization Name"
+                  name="organisationName"
+                  autoComplete="Orgname"
+                  onChange={e => changeHandler(e)}
+                />
+                {signUpFormState.organisationName.length === 0 && isError && (
+                  <FormHelperText error id="component-error-text">
+                    Please enter your organization Name
+                  </FormHelperText>
+                )}
+              </Grid>
+            )}
           </Grid>
           <Button
             type="button"
@@ -282,7 +288,7 @@ function TutorSignup({ history, tutorSignup }) {
 
 const mapStateToProps = state => {
   return {
-    isApiLoading: state.signup.isApiLoading,
+    // isApiLoading: state.signup.isApiLoading,
   }
 }
 
