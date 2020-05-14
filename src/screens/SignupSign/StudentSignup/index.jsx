@@ -1,21 +1,26 @@
-import React, { useState, useEffect } from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
-import Copyright from 'components/Copyright';
-import { withRouter } from 'react-router';
-import PropTypes from 'prop-types';
-
-import { FormHelperText } from '@material-ui/core';
-import { emailRegx } from 'utils/commonConstants';
+import React, { useState, useEffect, useRef } from 'react'
+import Avatar from '@material-ui/core/Avatar'
+import Button from '@material-ui/core/Button'
+import CssBaseline from '@material-ui/core/CssBaseline'
+import TextField from '@material-ui/core/TextField'
+import Link from '@material-ui/core/Link'
+import Grid from '@material-ui/core/Grid'
+import Box from '@material-ui/core/Box'
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
+import Typography from '@material-ui/core/Typography'
+import { makeStyles } from '@material-ui/core/styles'
+import Container from '@material-ui/core/Container'
+import Copyright from 'components/Copyright'
+import { withRouter } from 'react-router'
+import PropTypes from 'prop-types'
+import { connect } from 'react-redux'
+import { FormHelperText } from '@material-ui/core'
+import { emailRegx } from 'utils/commonConstants'
+import { SignupServiceForStudent } from 'services/signup'
+import { commonApiAction } from 'redux/actions/commonApiAction'
+import { StudentSignupReducerName } from 'redux/constants/reducerNames'
+import { setAccessToken, setRefreshToken } from 'utils/helperFunction'
+import Loader from 'components/Loaders'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -35,63 +40,72 @@ const useStyles = makeStyles(theme => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
-}));
+}))
 
-function StudentSignup({ history }) {
+function StudentSignup({
+  history,
+  signupData,
+  studentSignup,
+  isApiLoading,
+  erronOnSignup,
+}) {
   const signUpFormFields = {
     firstName: '',
     lastName: '',
     email: '',
     password: '',
-    organizationName: '',
-    ownOrganization: '',
-  };
-  const [signUpFormState, setSignUpFormState] = useState(signUpFormFields);
-  const [isError, setIsError] = useState(false);
-  const [isEmailValid, setIsEmailValid] = useState(false);
-
-  const classes = useStyles();
+  }
+  const [signUpFormState, setSignUpFormState] = useState(signUpFormFields)
+  const [isError, setIsError] = useState(false)
+  const [isEmailValid, setIsEmailValid] = useState(false)
+  const prevStateOfIsApiLoading = useRef(false)
+  const classes = useStyles()
 
   const changeHandler = event => {
-    event.stopPropagation();
-    const { name, value } = event.target;
+    event.stopPropagation()
+    const { name, value } = event.target
     setSignUpFormState({
       ...signUpFormState,
       [name]: value,
-    });
-  };
+    })
+  }
+
+  useEffect(() => {
+    if (prevStateOfIsApiLoading.current && !erronOnSignup) {
+      setAccessToken(signupData.access)
+      setRefreshToken(signupData.refresh)
+      history.push('/dashboard')
+    } else prevStateOfIsApiLoading.current = isApiLoading
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isApiLoading, erronOnSignup])
 
   useEffect(() => {
     if (
       signUpFormState.email.length !== 0 &&
       signUpFormState.firstName.length !== 0 &&
-      signUpFormState.organizationName.length !== 0 &&
       signUpFormState.password.length !== 0 &&
-      signUpFormState.password.length === 6 &&
-      signUpFormState.ownOrganization.length !== 0
+      signUpFormState.password.length === 8
     ) {
-      setIsError(false);
+      setIsError(false)
     }
     if (emailRegx.test(signUpFormState.email)) {
-      setIsEmailValid(false);
-    } else setIsEmailValid(true);
+      setIsEmailValid(false)
+    } else setIsEmailValid(true)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [signUpFormState, isEmailValid]);
+  }, [signUpFormState, isEmailValid])
 
   const submitRegisterForm = () => {
     if (
       signUpFormState.email.length === 0 ||
       signUpFormState.firstName.length === 0 ||
-      signUpFormState.organizationName.length === 0 ||
       signUpFormState.password.length === 0 ||
-      signUpFormState.password.length !== 6 ||
-      signUpFormState.ownOrganization.length === 0
+      signUpFormState.password.length !== 8
     ) {
-      setIsError(true);
+      setIsError(true)
     } else {
-      // setIsError(false);
+      studentSignup(signUpFormState)
     }
-  };
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -161,7 +175,7 @@ function StudentSignup({ history }) {
               <TextField
                 error={
                   (signUpFormState.email.length === 0 ||
-                    signUpFormState.password.length !== 6) &&
+                    signUpFormState.password.length !== 8) &&
                   isError
                 }
                 onChange={e => changeHandler(e)}
@@ -175,7 +189,7 @@ function StudentSignup({ history }) {
                 id="password"
                 autoComplete="current-password"
                 inputProps={{
-                  maxLength: 6,
+                  maxLength: 8,
                 }}
               />
               {signUpFormState.password.length === 0 && isError ? (
@@ -183,10 +197,10 @@ function StudentSignup({ history }) {
                   Please enter your password
                 </FormHelperText>
               ) : (
-                signUpFormState.password.length < 6 &&
+                signUpFormState.password.length < 8 &&
                 isError && (
                   <FormHelperText error id="component-error-text">
-                    Please enter minimum 6 length password
+                    Please enter minimum 8 length password
                   </FormHelperText>
                 )
               )}
@@ -197,12 +211,13 @@ function StudentSignup({ history }) {
             fullWidth
             variant="contained"
             color="primary"
+            disabled={isApiLoading}
             className={classes.submit}
             onClick={() => {
-              submitRegisterForm();
+              submitRegisterForm()
             }}
           >
-            Sign Up
+            {isApiLoading ? <Loader type="circularLoader" /> : 'Sign Up'}
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
@@ -221,11 +236,38 @@ function StudentSignup({ history }) {
         <Copyright />
       </Box>
     </Container>
-  );
+  )
+}
+const mapStateToProps = state => {
+  return {
+    isApiLoading: state.studentSignup.isApiLoading,
+    erronOnSignup: state.studentSignup.apiError,
+    signupData: state.studentSignup.apiData,
+  }
 }
 
-export default withRouter(StudentSignup);
+const mapDispatchToProps = dispatch => {
+  return {
+    studentSignup: body =>
+      dispatch(
+        commonApiAction(SignupServiceForStudent)(StudentSignupReducerName, body)
+      ),
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(withRouter(StudentSignup))
 
 StudentSignup.propTypes = {
+  isApiLoading: PropTypes.bool.isRequired,
+  erronOnSignup: PropTypes.object,
+  signupData: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
-};
+  studentSignup: PropTypes.func.isRequired,
+}
+
+StudentSignup.defaultProps = {
+  erronOnSignup: null,
+}

@@ -5,6 +5,9 @@ function Loader({ type }) {
     switch (type) {
       case 'circularLoader':
         return CircularDeterminate()
+
+      default:
+        return null
     }
   }
   return showLoader(type)

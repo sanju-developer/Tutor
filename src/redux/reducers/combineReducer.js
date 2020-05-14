@@ -3,9 +3,15 @@ import { ErrorReducerName } from 'redux/constants/reducerNames'
 
 import commonApiReducer from './commonApiReducer'
 import ErrorReducerFunction from './ErrorReducer'
+import signInReducer from './signInReducer'
 import tutorSignupReducerFunction from './tutorSignupReducer'
+import studentSignupReducerFunction from './studentSignupReducer'
 import { UserRoleReducer } from './userRoleReducer'
-import { TutorSignupReducerName } from '../constants/reducerNames'
+import {
+  TutorSignupReducerName,
+  StudentSignupReducerName,
+  SignInReducerName,
+} from '../constants/reducerNames'
 
 const rootReducer = combineReducers({
   error: commonApiReducer(ErrorReducerName, ErrorReducerFunction),
@@ -14,6 +20,11 @@ const rootReducer = combineReducers({
     TutorSignupReducerName,
     tutorSignupReducerFunction
   ),
+  studentSignup: commonApiReducer(
+    StudentSignupReducerName,
+    studentSignupReducerFunction
+  ),
+  signIn: commonApiReducer(SignInReducerName, signInReducer),
 })
 
 export default rootReducer

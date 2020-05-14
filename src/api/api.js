@@ -15,8 +15,14 @@ const { API } = ServerConfig
   axios.interceptors.response.use(
     response => response,
     error => {
-      // Reject promise if usual error
-      if (error.response.status !== UnauthorizedErrCode) {
+      // Reject promise if api call for signin
+      if (
+        error.response.config.url.indexOf(endpoints.student_login) ||
+        error.response.config.url.indexOf(endpoints.tutor_login) > -1
+      ) {
+        return
+      } else if (error.response.status !== UnauthorizedErrCode) {
+        // Reject promise if usual error
         return Promise.reject(error)
       }
       /*

@@ -9,5 +9,5 @@ export const httpMethods = {
   DELETE: 'delete',
 }
 
-export const EntryAsOwner = 'Owner' || 'Tutor'
+export const EntryAsOwner = 'owner' || 'teacher'
 export const EntryAsStudent = 'Student'

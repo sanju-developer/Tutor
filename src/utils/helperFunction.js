@@ -17,7 +17,7 @@ export function createQueryParams(queryParamString) {
 }
 
 export const isLoggedIn = () => {
-  if (localStorage.getItem('token')) {
+  if (getAccessToken()) {
     return true
   } else return false
 }
@@ -58,6 +58,13 @@ export function getRefreshToken() {
 export function clearCookies() {
   cookies.remove('accessToken')
   cookies.remove('refreshToken')
+}
+
+export function setUserRoleInLS(role) {
+  localStorage.setItem('userRole', role)
+}
+export function getUserRoleInLS() {
+  return localStorage.getItem('userRole')
 }
 
 // set headers name on click of item from sidebar

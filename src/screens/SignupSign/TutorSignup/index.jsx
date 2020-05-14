@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -25,11 +25,12 @@ import {
   FormHelperText,
 } from '@material-ui/core'
 import { emailRegx } from 'utils/commonConstants'
-import { SignupServiceForTutor } from 'services/tutorSignup'
+import { SignupServiceForTutor } from 'services/signup'
 import { commonApiAction } from 'redux/actions/commonApiAction'
 import { TutorSignupReducerName } from 'redux/constants/reducerNames'
-import Loader from 'components/Loaders/inedx'
 import { removeEmptyKeyFromObject } from 'utils/helperFunction'
+import { setAccessToken, setRefreshToken } from 'utils/helperFunction'
+import Loader from 'components/Loaders'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -51,7 +52,13 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-function TutorSignup({ history, tutorSignup, isApiLoading }) {
+function TutorSignup({
+  history,
+  signupData,
+  tutorSignup,
+  isApiLoading,
+  erronOnSignup,
+}) {
   const signUpFormFields = {
     firstName: '',
     lastName: '',
@@ -63,7 +70,7 @@ function TutorSignup({ history, tutorSignup, isApiLoading }) {
   const [signUpFormState, setSignUpFormState] = useState(signUpFormFields)
   const [isError, setIsError] = useState(false)
   const [isEmailValid, setIsEmailValid] = useState(false)
-
+  const prevStateOfIsApiLoading = useRef(false)
   const classes = useStyles()
 
   const changeHandler = event => {
@@ -92,26 +99,36 @@ function TutorSignup({ history, tutorSignup, isApiLoading }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signUpFormState, isEmailValid])
 
+  useEffect(() => {
+    if (prevStateOfIsApiLoading.current && !erronOnSignup) {
+      setAccessToken(signupData.access)
+      setRefreshToken(signupData.refresh)
+      history.push('/dashboard')
+    } else prevStateOfIsApiLoading.current = isApiLoading
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isApiLoading, erronOnSignup])
+
   const submitRegisterForm = () => {
+    const copyOfSignUpFormState = { ...signUpFormState }
     if (
-      signUpFormState.email.length === 0 ||
-      signUpFormState.firstName.length === 0 ||
-      signUpFormState.password.length === 0 ||
-      signUpFormState.password.length !== 8 ||
-      signUpFormState.tutorType.length === 0
+      copyOfSignUpFormState.email.length === 0 ||
+      copyOfSignUpFormState.firstName.length === 0 ||
+      copyOfSignUpFormState.password.length === 0 ||
+      copyOfSignUpFormState.password.length !== 8 ||
+      copyOfSignUpFormState.tutorType.length === 0
     ) {
       setIsError(true)
     } else if (
-      signUpFormState.tutorType === 'Yes' &&
-      signUpFormState.organisationName.length === 0
+      copyOfSignUpFormState.tutorType === 'Yes' &&
+      copyOfSignUpFormState.organisationName.length === 0
     ) {
       setIsError(true)
     } else {
-      signUpFormState.tutorType === 'Yes'
-        ? (signUpFormState.tutorType = 'owner')
-        : (signUpFormState.tutorType = 'teacher')
+      copyOfSignUpFormState.tutorType === 'Yes'
+        ? (copyOfSignUpFormState.tutorType = 'owner')
+        : (copyOfSignUpFormState.tutorType = 'teacher')
 
-      tutorSignup(removeEmptyKeyFromObject({ ...signUpFormState }))
+      tutorSignup(removeEmptyKeyFromObject(copyOfSignUpFormState))
     }
   }
 
@@ -237,9 +254,7 @@ function TutorSignup({ history, tutorSignup, isApiLoading }) {
                 </FormHelperText>
               )}
             </Grid>
-            {(signUpFormState.tutorType === 'Yes' ||
-              signUpFormState.tutorType === 'teacher' ||
-              signUpFormState.tutorType === 'owner') && (
+            {signUpFormState.tutorType === 'Yes' && (
               <Grid item xs={12}>
                 <TextField
                   error={
@@ -300,6 +315,8 @@ function TutorSignup({ history, tutorSignup, isApiLoading }) {
 const mapStateToProps = state => {
   return {
     isApiLoading: state.tutorSignup.isApiLoading,
+    erronOnSignup: state.tutorSignup.apiError,
+    signupData: state.tutorSignup.apiData,
   }
 }
 
@@ -319,6 +336,12 @@ export default connect(
 
 TutorSignup.propTypes = {
   isApiLoading: PropTypes.bool.isRequired,
+  erronOnSignup: PropTypes.object,
+  signupData: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
   tutorSignup: PropTypes.func.isRequired,
+}
+
+TutorSignup.defaultProps = {
+  erronOnSignup: null,
 }

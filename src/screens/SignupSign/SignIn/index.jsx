@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -20,7 +20,10 @@ import GetStartedDialog from 'components/Dialog/GetStartedDialog'
 import { connect } from 'react-redux'
 import { commonApiAction } from 'redux/actions/commonApiAction'
 import { SignInServiceForStudent, SignInServiceForTutor } from 'services/signIn'
-import { EntryAsOwner } from 'utils/commonConstants'
+import { EntryAsStudent } from 'utils/commonConstants'
+import { setAccessToken, setRefreshToken } from 'utils/helperFunction'
+import { SignInReducerName } from 'redux/constants/reducerNames'
+import { getUserRoleInLS } from 'utils/helperFunction'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -42,10 +45,18 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-function SignIn({ history, singinAs, signinAsTutor, signinAsStudent }) {
+function SignIn({
+  history,
+  signinAs,
+  signinAsTutor,
+  signinAsStudent,
+  signInData,
+  isApiLoading,
+  erronOnSignin,
+}) {
   const [open, setOpen] = React.useState(false)
   const [selectedValue, setSelectedValue] = React.useState(null)
-
+  const prevStateOfIsApiLoading = useRef(false)
   const handleClickOpen = () => {
     setOpen(true)
   }
@@ -77,10 +88,24 @@ function SignIn({ history, singinAs, signinAsTutor, signinAsStudent }) {
   }
 
   useEffect(() => {
+    if (!signinAs && !getUserRoleInLS()) history.replace('/')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [signinAs])
+
+  useEffect(() => {
+    if (prevStateOfIsApiLoading.current && !erronOnSignin) {
+      setAccessToken(signInData.access)
+      setRefreshToken(signInData.refresh)
+      history.push('/dashboard')
+    } else prevStateOfIsApiLoading.current = isApiLoading
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isApiLoading, erronOnSignin])
+
+  useEffect(() => {
     if (
       signInFormState.email.length !== 0 &&
       signInFormState.password.length !== 0 &&
-      signInFormState.password.length === 6
+      signInFormState.password.length === 8
     ) {
       setIsError(false)
     }
@@ -94,16 +119,13 @@ function SignIn({ history, singinAs, signinAsTutor, signinAsStudent }) {
     if (
       signInFormState.email.length === 0 ||
       signInFormState.password.length === 0 ||
-      signInFormState.password.length !== 6
+      signInFormState.password.length !== 8
     ) {
       setIsError(true)
     } else {
-      singinAs === EntryAsOwner
-        ? signinAsTutor(signInFormState)
-        : signinAsStudent(signInFormState)
-      localStorage.setItem('token', 'qwerty')
-      history.push('/dashboard')
-      // setIsError(false);
+      signinAs === EntryAsStudent
+        ? signinAsStudent(signInFormState)
+        : signinAsTutor(signInFormState)
     }
   }
 
@@ -115,7 +137,7 @@ function SignIn({ history, singinAs, signinAsTutor, signinAsStudent }) {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Sign in As {signinAs || getUserRoleInLS()}
         </Typography>
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
@@ -143,7 +165,7 @@ function SignIn({ history, singinAs, signinAsTutor, signinAsStudent }) {
               <TextField
                 error={
                   (signInFormState.email.length === 0 ||
-                    signInFormState.password.length !== 6) &&
+                    signInFormState.password.length !== 8) &&
                   isError
                 }
                 onChange={e => changeHandler(e)}
@@ -157,7 +179,7 @@ function SignIn({ history, singinAs, signinAsTutor, signinAsStudent }) {
                 id="password"
                 autoComplete="current-password"
                 inputProps={{
-                  maxLength: 6,
+                  maxLength: 8,
                 }}
               />
               {signInFormState.password.length === 0 && isError ? (
@@ -165,10 +187,10 @@ function SignIn({ history, singinAs, signinAsTutor, signinAsStudent }) {
                   Please enter your password
                 </FormHelperText>
               ) : (
-                signInFormState.password.length < 6 &&
+                signInFormState.password.length < 8 &&
                 isError && (
                   <FormHelperText error id="component-error-text">
-                    Please enter minimum 6 length password
+                    Please enter minimum 8 length password
                   </FormHelperText>
                 )
               )}
@@ -218,32 +240,38 @@ function SignIn({ history, singinAs, signinAsTutor, signinAsStudent }) {
 }
 
 const mapStateToProps = state => {
-  console.log(state)
-
   return {
-    // isApiLoading: state.login.isApiLoading,
-    singinAs: state.userRole.userRole,
+    isApiLoading: state.signIn.isApiLoading,
+    erronOnSignin: state.signIn.apiError,
+    signInData: state.signIn.apiData,
+    signinAs: state.userRole.userRole,
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
     signinAsStudent: body =>
-      dispatch(commonApiAction(SignInServiceForStudent)(body)),
+      dispatch(
+        commonApiAction(SignInServiceForStudent)(SignInReducerName, body)
+      ),
     signinAsTutor: body =>
-      dispatch(commonApiAction(SignInServiceForTutor)(body)),
+      dispatch(commonApiAction(SignInServiceForTutor)(SignInReducerName, body)),
   }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignIn)
 
 SignIn.propTypes = {
+  isApiLoading: PropTypes.bool.isRequired,
+  erronOnSignin: PropTypes.object,
+  signInData: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
-  singinAs: PropTypes.string,
+  signinAs: PropTypes.string,
   signinAsTutor: PropTypes.func.isRequired,
   signinAsStudent: PropTypes.func.isRequired,
 }
 
 SignIn.defaultProps = {
-  singinAs: null,
+  signinAs: null,
+  erronOnSignin: null,
 }

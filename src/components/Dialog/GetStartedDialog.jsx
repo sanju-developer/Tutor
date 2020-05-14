@@ -11,7 +11,8 @@ import Dialog from '@material-ui/core/Dialog'
 import PersonIcon from '@material-ui/icons/Person'
 import { blue } from '@material-ui/core/colors'
 import { connect } from 'react-redux'
-import { SetUserRole } from 'redux/actions/userRoleAction'
+import { setUserRoleInLS } from 'utils/helperFunction'
+import { SetUserRoleAction } from 'redux/actions/userRoleAction'
 
 const useStyles = makeStyles({
   avatar: {
@@ -30,6 +31,7 @@ function GetStartedDialog(props) {
   }
 
   const handleListItemClick = value => {
+    setUserRoleInLS(value)
     setUserRole(value)
     onClose(value)
   }
@@ -59,7 +61,7 @@ function GetStartedDialog(props) {
 
 const mapDispatchToProps = dispatch => {
   return {
-    setUserRole: userRole => dispatch(SetUserRole(userRole)),
+    setUserRole: userRole => dispatch(SetUserRoleAction(userRole)),
   }
 }
 
