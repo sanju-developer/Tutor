@@ -24,6 +24,9 @@ import { EntryAsStudent } from 'utils/commonConstants'
 import { setAccessToken, setRefreshToken } from 'utils/helperFunction'
 import { SignInReducerName } from 'redux/constants/reducerNames'
 import { getUserRoleInLS } from 'utils/helperFunction'
+import ErrorComponent from '../../../components/Errors'
+import { commonActionCreator } from '../../../redux/actions/commonActionCreator'
+import { apiCommonActionType } from '../../../redux/constants/actionTypeName'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -53,6 +56,7 @@ function SignIn({
   signInData,
   isApiLoading,
   erronOnSignin,
+  clearError,
 }) {
   const [open, setOpen] = React.useState(false)
   const [selectedValue, setSelectedValue] = React.useState(null)
@@ -86,6 +90,10 @@ function SignIn({
       [name]: value,
     })
   }
+
+  useEffect(() => {
+    if (erronOnSignin) clearError()
+  }, [erronOnSignin])
 
   useEffect(() => {
     if (!signinAs && !getUserRoleInLS()) history.replace('/')
@@ -235,6 +243,9 @@ function SignIn({
       <Box mt={8}>
         <Copyright />
       </Box>
+      {erronOnSignin && (
+        <ErrorComponent message={erronOnSignin.data.detail} variant="error" />
+      )}
     </Container>
   )
 }
@@ -256,6 +267,13 @@ const mapDispatchToProps = dispatch => {
       ),
     signinAsTutor: body =>
       dispatch(commonApiAction(SignInServiceForTutor)(SignInReducerName, body)),
+    clearError: () =>
+      dispatch(
+        commonActionCreator(SignInReducerName)(
+          apiCommonActionType.clearError,
+          null
+        )
+      ),
   }
 }
 
@@ -269,6 +287,7 @@ SignIn.propTypes = {
   signinAs: PropTypes.string,
   signinAsTutor: PropTypes.func.isRequired,
   signinAsStudent: PropTypes.func.isRequired,
+  clearError: PropTypes.func.isRequired,
 }
 
 SignIn.defaultProps = {

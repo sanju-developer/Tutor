@@ -20,7 +20,7 @@ const { API } = ServerConfig
         error.response.config.url.indexOf(endpoints.student_login) ||
         error.response.config.url.indexOf(endpoints.tutor_login) > -1
       ) {
-        return
+        return Promise.reject(error)
       } else if (error.response.status !== UnauthorizedErrCode) {
         // Reject promise if usual error
         return Promise.reject(error)
