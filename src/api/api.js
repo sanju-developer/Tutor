@@ -33,7 +33,7 @@ const { API } = ServerConfig
       const refreshToken = getRefreshToken()
       return axios
         .post(API.BASE_URL + endpoints.refresh_token, {
-          refreshToken: refreshToken,
+          refresh: refreshToken,
         })
         .then(response => {
           // saveToken()
