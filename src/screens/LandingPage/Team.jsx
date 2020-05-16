@@ -35,8 +35,10 @@ function Team() {
                   Rhoncus dolor purus non enim praesent elementum facilisis leo
                   vel. Risus at ultrices mi tempus imperdiet. Semper risus in
                   hendrerit gravida rutrum quisque non tellus.
-                  <h4>arunaggarwal1997@gmail.com</h4>
                 </Typography>
+                <h3 style={{ textAlign: 'center' }}>
+                  arunaggarwal1997@gmail.com
+                </h3>
               </Card>
             </Box>
           </Box>
@@ -59,8 +61,10 @@ function Team() {
                   Rhoncus dolor purus non enim praesent elementum facilisis leo
                   vel. Risus at ultrices mi tempus imperdiet. Semper risus in
                   hendrerit gravida rutrum quisque non tellus.
-                  <h4>Shubhamtanwar23@gmail.com</h4>
                 </Typography>
+                <h3 style={{ textAlign: 'center' }}>
+                  Shubhamtanwar23@gmail.com
+                </h3>
               </Card>
             </Box>
           </Box>
@@ -83,8 +87,10 @@ function Team() {
                   Rhoncus dolor purus non enim praesent elementum facilisis leo
                   vel. Risus at ultrices mi tempus imperdiet. Semper risus in
                   hendrerit gravida rutrum quisque non tellus.
-                  <h4>vivekrajoriya106@gmail.com</h4>
                 </Typography>
+                <h3 style={{ textAlign: 'center' }}>
+                  vivekrajoriya106@gmail.com
+                </h3>
               </Card>
             </Box>
           </Box>

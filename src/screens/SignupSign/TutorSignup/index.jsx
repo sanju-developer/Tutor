@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -15,6 +15,7 @@ import Copyright from 'components/Copyright'
 import { withRouter } from 'react-router'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import ErrorComponent from 'components/Errors'
 import '../SignupSignin.scss'
 
 import {
@@ -25,6 +26,15 @@ import {
   FormHelperText,
 } from '@material-ui/core'
 import { emailRegx } from 'utils/commonConstants'
+import { SignupServiceForTutor } from 'services/signup'
+import { commonApiAction } from 'redux/actions/commonApiAction'
+import { TutorSignupReducerName } from 'redux/constants/reducerNames'
+import { removeEmptyKeyFromObject } from 'utils/helperFunction'
+import { setAccessToken, setRefreshToken } from 'utils/helperFunction'
+import { apiCommonActionType } from 'redux/constants/actionTypeName'
+import { commonActionCreator } from 'redux/actions/commonActionCreator'
+import { getUserRoleInLS } from 'utils/helperFunction'
+import Loader from 'components/Loaders'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -46,7 +56,15 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-function TutorSignup({ history, tutorSignup }) {
+function TutorSignup({
+  history,
+  signupData,
+  tutorSignup,
+  isApiLoading,
+  erronOnTutorSignup,
+  clearError,
+  signinAs,
+}) {
   const signUpFormFields = {
     firstName: '',
     lastName: '',
@@ -58,7 +76,7 @@ function TutorSignup({ history, tutorSignup }) {
   const [signUpFormState, setSignUpFormState] = useState(signUpFormFields)
   const [isError, setIsError] = useState(false)
   const [isEmailValid, setIsEmailValid] = useState(false)
-
+  const prevStateOfIsApiLoading = useRef(false)
   const classes = useStyles()
 
   const changeHandler = event => {
@@ -69,6 +87,11 @@ function TutorSignup({ history, tutorSignup }) {
       [name]: value,
     })
   }
+
+  useEffect(() => {
+    if (!signinAs && !getUserRoleInLS()) history.replace('/')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [signinAs])
 
   useEffect(() => {
     if (
@@ -87,23 +110,41 @@ function TutorSignup({ history, tutorSignup }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [signUpFormState, isEmailValid])
 
+  useEffect(() => {
+    if (erronOnTutorSignup) clearError()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [erronOnTutorSignup])
+
+  useEffect(() => {
+    if (prevStateOfIsApiLoading.current && signupData) {
+      setAccessToken(signupData.access)
+      setRefreshToken(signupData.refresh)
+      history.push('/dashboard')
+    } else prevStateOfIsApiLoading.current = isApiLoading
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isApiLoading, erronOnTutorSignup])
+
   const submitRegisterForm = () => {
+    const copyOfSignUpFormState = { ...signUpFormState }
     if (
-      signUpFormState.email.length === 0 ||
-      signUpFormState.firstName.length === 0 ||
-      signUpFormState.organisationName.length === 0 ||
-      signUpFormState.password.length === 0 ||
-      signUpFormState.password.length !== 6 ||
-      signUpFormState.tutorType.length === 0
+      copyOfSignUpFormState.email.length === 0 ||
+      copyOfSignUpFormState.firstName.length === 0 ||
+      copyOfSignUpFormState.password.length === 0 ||
+      copyOfSignUpFormState.password.length !== 8 ||
+      copyOfSignUpFormState.tutorType.length === 0
+    ) {
+      setIsError(true)
+    } else if (
+      copyOfSignUpFormState.tutorType === 'Yes' &&
+      copyOfSignUpFormState.organisationName.length === 0
     ) {
       setIsError(true)
     } else {
-      signUpFormState.tutorType === 'Yes'
-        ? (signUpFormState.tutorType = 'owner')
-        : (signUpFormState.tutorType = 'tutor')
+      copyOfSignUpFormState.tutorType === 'Yes'
+        ? (copyOfSignUpFormState.tutorType = 'owner')
+        : (copyOfSignUpFormState.tutorType = 'teacher')
 
-      console.log(signUpFormState)
-      // tutorSignup(signUpFormState)
+      tutorSignup(removeEmptyKeyFromObject(copyOfSignUpFormState))
     }
   }
 
@@ -115,7 +156,7 @@ function TutorSignup({ history, tutorSignup }) {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up
+          Sign up {signinAs || getUserRoleInLS()}
         </Typography>
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
@@ -175,7 +216,7 @@ function TutorSignup({ history, tutorSignup }) {
               <TextField
                 error={
                   (signUpFormState.email.length === 0 ||
-                    signUpFormState.password.length !== 6) &&
+                    signUpFormState.password.length !== 8) &&
                   isError
                 }
                 onChange={e => changeHandler(e)}
@@ -189,7 +230,7 @@ function TutorSignup({ history, tutorSignup }) {
                 id="password"
                 autoComplete="current-password"
                 inputProps={{
-                  maxLength: 6,
+                  maxLength: 8,
                 }}
               />
               {signUpFormState.password.length === 0 && isError ? (
@@ -197,10 +238,10 @@ function TutorSignup({ history, tutorSignup }) {
                   Please enter your password
                 </FormHelperText>
               ) : (
-                signUpFormState.password.length < 6 &&
+                signUpFormState.password.length < 8 &&
                 isError && (
                   <FormHelperText error id="component-error-text">
-                    Please enter minimum 6 length password
+                    Please enter minimum 8 length password
                   </FormHelperText>
                 )
               )}
@@ -258,12 +299,13 @@ function TutorSignup({ history, tutorSignup }) {
             fullWidth
             variant="contained"
             color="primary"
+            disabled={isApiLoading}
             className={classes.submit}
             onClick={() => {
               submitRegisterForm()
             }}
           >
-            Sign Up
+            {isApiLoading ? <Loader type="circularLoader" /> : 'Sign Up'}
           </Button>
           <Grid container justify="flex-end">
             <Grid item>
@@ -282,19 +324,37 @@ function TutorSignup({ history, tutorSignup }) {
         <Copyright />
       </Box>
       <Box className="tutor-signup-div" />
+      {erronOnTutorSignup && (
+        <ErrorComponent
+          message={erronOnTutorSignup.data.error}
+          variant="error"
+        />
+      )}
     </Container>
   )
 }
 
 const mapStateToProps = state => {
   return {
-    // isApiLoading: state.signup.isApiLoading,
+    isApiLoading: state.tutorSignup.isApiLoading,
+    erronOnTutorSignup: state.tutorSignup.apiError,
+    signupData: state.tutorSignup.apiData,
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    tutorSignup: () => dispatch(),
+    tutorSignup: body =>
+      dispatch(
+        commonApiAction(SignupServiceForTutor)(TutorSignupReducerName, body)
+      ),
+    clearError: () =>
+      dispatch(
+        commonActionCreator(TutorSignupReducerName)(
+          apiCommonActionType.clearError,
+          null
+        )
+      ),
   }
 }
 
@@ -304,6 +364,17 @@ export default connect(
 )(withRouter(TutorSignup))
 
 TutorSignup.propTypes = {
+  isApiLoading: PropTypes.bool.isRequired,
+  erronOnTutorSignup: PropTypes.object,
+  signupData: PropTypes.object,
   history: PropTypes.object.isRequired,
   tutorSignup: PropTypes.func.isRequired,
+  clearError: PropTypes.func.isRequired,
+  signinAs: PropTypes.string,
+}
+
+TutorSignup.defaultProps = {
+  erronOnTutorSignup: null,
+  signupData: null,
+  signinAs: null,
 }

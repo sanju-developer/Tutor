@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Avatar from '@material-ui/core/Avatar'
 import Button from '@material-ui/core/Button'
 import CssBaseline from '@material-ui/core/CssBaseline'
@@ -20,7 +20,14 @@ import GetStartedDialog from 'components/Dialog/GetStartedDialog'
 import { connect } from 'react-redux'
 import { commonApiAction } from 'redux/actions/commonApiAction'
 import { SignInServiceForStudent, SignInServiceForTutor } from 'services/signIn'
-import { EntryAsOwner } from 'utils/commonConstants'
+import { EntryAsStudent } from 'utils/commonConstants'
+import { setAccessToken, setRefreshToken } from 'utils/helperFunction'
+import { SignInReducerName } from 'redux/constants/reducerNames'
+import { getUserRoleInLS } from 'utils/helperFunction'
+import Loader from 'components/Loaders'
+import ErrorComponent from 'components/Errors'
+import { commonActionCreator } from 'redux/actions/commonActionCreator'
+import { apiCommonActionType } from 'redux/constants/actionTypeName'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -42,10 +49,19 @@ const useStyles = makeStyles(theme => ({
   },
 }))
 
-function SignIn({ history, signinAsTutor, signinAsStudent }) {
+function SignIn({
+  history,
+  signinAs,
+  signinAsTutor,
+  signinAsStudent,
+  signInData,
+  isSigninApiLoading,
+  erronOnSignin,
+  clearError,
+}) {
   const [open, setOpen] = React.useState(false)
   const [selectedValue, setSelectedValue] = React.useState(null)
-
+  const prevStateOfIsApiLoading = useRef(false)
   const handleClickOpen = () => {
     setOpen(true)
   }
@@ -77,10 +93,29 @@ function SignIn({ history, signinAsTutor, signinAsStudent }) {
   }
 
   useEffect(() => {
+    if (erronOnSignin) clearError()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [erronOnSignin])
+
+  useEffect(() => {
+    if (!signinAs && !getUserRoleInLS()) history.replace('/')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [signinAs])
+
+  useEffect(() => {
+    if (prevStateOfIsApiLoading.current && !erronOnSignin) {
+      setAccessToken(signInData.access)
+      setRefreshToken(signInData.refresh)
+      history.push('/dashboard')
+    } else prevStateOfIsApiLoading.current = isSigninApiLoading
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isSigninApiLoading, erronOnSignin])
+
+  useEffect(() => {
     if (
       signInFormState.email.length !== 0 &&
       signInFormState.password.length !== 0 &&
-      signInFormState.password.length === 6
+      signInFormState.password.length === 8
     ) {
       setIsError(false)
     }
@@ -94,16 +129,13 @@ function SignIn({ history, signinAsTutor, signinAsStudent }) {
     if (
       signInFormState.email.length === 0 ||
       signInFormState.password.length === 0 ||
-      signInFormState.password.length !== 6
+      signInFormState.password.length !== 8
     ) {
       setIsError(true)
     } else {
-      // singinAs === EntryAsOwner
-      //   ? signinAsTutor(signInFormState)
-      //   : signinAsStudent(signInFormState)
-      // localStorage.setItem('token', 'qwerty')
-      // history.push('/dashboard')
-      // setIsError(false);
+      signinAs === EntryAsStudent
+        ? signinAsStudent(signInFormState)
+        : signinAsTutor(signInFormState)
     }
   }
 
@@ -115,7 +147,7 @@ function SignIn({ history, signinAsTutor, signinAsStudent }) {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Sign in As {signinAs || getUserRoleInLS()}
         </Typography>
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
@@ -143,7 +175,7 @@ function SignIn({ history, signinAsTutor, signinAsStudent }) {
               <TextField
                 error={
                   (signInFormState.email.length === 0 ||
-                    signInFormState.password.length !== 6) &&
+                    signInFormState.password.length !== 8) &&
                   isError
                 }
                 onChange={e => changeHandler(e)}
@@ -157,7 +189,7 @@ function SignIn({ history, signinAsTutor, signinAsStudent }) {
                 id="password"
                 autoComplete="current-password"
                 inputProps={{
-                  maxLength: 6,
+                  maxLength: 8,
                 }}
               />
               {signInFormState.password.length === 0 && isError ? (
@@ -165,10 +197,10 @@ function SignIn({ history, signinAsTutor, signinAsStudent }) {
                   Please enter your password
                 </FormHelperText>
               ) : (
-                signInFormState.password.length < 6 &&
+                signInFormState.password.length < 8 &&
                 isError && (
                   <FormHelperText error id="component-error-text">
-                    Please enter minimum 6 length password
+                    Please enter minimum 8 length password
                   </FormHelperText>
                 )
               )}
@@ -180,12 +212,17 @@ function SignIn({ history, signinAsTutor, signinAsStudent }) {
             <Button
               type="button"
               fullWidth
+              disabled={isSigninApiLoading}
               variant="contained"
               color="primary"
               className={classes.submit}
               onClick={submitLoginForm}
             >
-              Sign In
+              {isSigninApiLoading ? (
+                <Loader type="circularLoader" />
+              ) : (
+                'Sign Up'
+              )}
             </Button>
             <Grid container>
               <Grid item xs>
@@ -197,9 +234,6 @@ function SignIn({ history, signinAsTutor, signinAsStudent }) {
                 <Link variant="body2" onClick={handleClickOpen}>
                   Do not have an account? Sign Up
                 </Link>
-                {/* <Button color="default" onClick={handleClickOpen}>
-                  Do not have an account? Sign Up
-                </Button> */}
                 <GetStartedDialog
                   selectedValue={selectedValue}
                   open={open}
@@ -213,29 +247,54 @@ function SignIn({ history, signinAsTutor, signinAsStudent }) {
       <Box mt={8}>
         <Copyright />
       </Box>
+      {erronOnSignin && (
+        <ErrorComponent message={erronOnSignin.data.detail} variant="error" />
+      )}
     </Container>
   )
 }
 
 const mapStateToProps = state => {
   return {
-    // isApiLoading: state.login.isApiLoading,
+    isSigninApiLoading: state.signIn.isApiLoading,
+    erronOnSignin: state.signIn.apiError,
+    signInData: state.signIn.apiData,
+    signinAs: state.userRole.userRole,
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
     signinAsStudent: body =>
-      dispatch(commonApiAction(SignInServiceForStudent)(body)),
+      dispatch(
+        commonApiAction(SignInServiceForStudent)(SignInReducerName, body)
+      ),
     signinAsTutor: body =>
-      dispatch(commonApiAction(SignInServiceForTutor)(body)),
+      dispatch(commonApiAction(SignInServiceForTutor)(SignInReducerName, body)),
+    clearError: () =>
+      dispatch(
+        commonActionCreator(SignInReducerName)(
+          apiCommonActionType.clearError,
+          null
+        )
+      ),
   }
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignIn)
 
 SignIn.propTypes = {
+  isSigninApiLoading: PropTypes.bool.isRequired,
+  erronOnSignin: PropTypes.object,
+  signInData: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
+  signinAs: PropTypes.string,
   signinAsTutor: PropTypes.func.isRequired,
   signinAsStudent: PropTypes.func.isRequired,
+  clearError: PropTypes.func.isRequired,
+}
+
+SignIn.defaultProps = {
+  signinAs: null,
+  erronOnSignin: null,
 }

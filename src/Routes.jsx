@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { Route, Redirect } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
@@ -49,7 +49,10 @@ const PublicRoute = ({ component: Component, restricted, ...rest }) => {
 }
 
 PublicRoute.propTypes = {
-  component: PropTypes.func.isRequired,
+  component: PropTypes.oneOfType([
+    PropTypes.instanceOf(Component),
+    PropTypes.func,
+  ]).isRequired,
   restricted: PropTypes.bool.isRequired,
 }
 

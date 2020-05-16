@@ -4,7 +4,7 @@ const initialState = {
   isApiLoading: false,
   apiData: null,
   isApiFailed: false,
-  apiError: null
+  apiError: null,
 }
 
 const commonApiReducer = (reducerName, respectiveReducer) => (
@@ -15,20 +15,25 @@ const commonApiReducer = (reducerName, respectiveReducer) => (
     case `${reducerName}_${apiCommonActionType.isLoading}`:
       return {
         ...state,
-        isApiLoading: true
+        isApiLoading: true,
       }
     case `${reducerName}_${apiCommonActionType.setData}`:
       return {
         ...state,
         isApiLoading: false,
-        apiData: action.payload
+        apiData: action.payload,
       }
     case `${reducerName}_${apiCommonActionType.setError}`:
       return {
         ...state,
         isApiFailed: true,
         isApiLoading: false,
-        apiError: action.payload
+        apiError: action.payload,
+      }
+    case `${reducerName}_${apiCommonActionType.clearError}`:
+      return {
+        ...state,
+        apiError: null,
       }
 
     default:

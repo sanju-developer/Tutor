@@ -15,8 +15,14 @@ const { API } = ServerConfig
   axios.interceptors.response.use(
     response => response,
     error => {
-      // Reject promise if usual error
-      if (error.response.status !== UnauthorizedErrCode) {
+      // Reject promise if api call for signin
+      if (
+        error.response.config.url.indexOf(endpoints.student_login) ||
+        error.response.config.url.indexOf(endpoints.tutor_login) > -1
+      ) {
+        return Promise.reject(error)
+      } else if (error.response.status !== UnauthorizedErrCode) {
+        // Reject promise if usual error
         return Promise.reject(error)
       }
       /*
@@ -27,7 +33,7 @@ const { API } = ServerConfig
       const refreshToken = getRefreshToken()
       return axios
         .post(API.BASE_URL + endpoints.refresh_token, {
-          refreshToken: refreshToken,
+          refresh: refreshToken,
         })
         .then(response => {
           // saveToken()
@@ -55,12 +61,7 @@ export const api = (
   queryParams,
   authRequired = true
 ) => {
-  const apiParameter = {
-    method: apiMethod,
-    url: API.BASE_URL + endpoint,
-    withCredentials: true,
-    timeout: 1000 * 120, // Wait for 120 seconds
-  }
+  const apiParameter = isWithCredentialTrue(endpoint, apiMethod)
   // get refreshToken and accessToken in session storage, inorder to prevent sideffect on page reload
   const accessToken = getAccessToken()
   // append headers if required
@@ -99,4 +100,25 @@ function handleResponse(response) {
     res = response
   }
   return res
+}
+
+function isWithCredentialTrue(endpoint, apiMethod) {
+  if (
+    endpoints.student_signup === endpoint ||
+    endpoints.tutor_login === endpoint ||
+    endpoints.student_login === endpoint ||
+    endpoints.tutor_signup === endpoint
+  )
+    return {
+      method: apiMethod,
+      url: API.BASE_URL + endpoint,
+      timeout: 1000 * 120, // Wait for 120 seconds
+    }
+  else
+    return {
+      method: apiMethod,
+      url: API.BASE_URL + endpoint,
+      withCredentials: true,
+      timeout: 1000 * 120, // Wait for 120 seconds
+    }
 }
