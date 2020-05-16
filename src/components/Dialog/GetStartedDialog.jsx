@@ -69,7 +69,11 @@ GetStartedDialog.propTypes = {
   onClose: PropTypes.func.isRequired,
   setUserRole: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
-  selectedValue: PropTypes.string.isRequired,
+  selectedValue: PropTypes.string,
+}
+
+GetStartedDialog.defaultProps = {
+  selectedValue: null,
 }
 
 export default connect(null, mapDispatchToProps)(GetStartedDialog)

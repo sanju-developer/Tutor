@@ -10,11 +10,11 @@ import App from './App'
 
 ReactDOM.render(
   <Provider store={store}>
-    <React.StrictMode>
-      <SnackbarProvider maxSnack={3}>
-        <App />
-      </SnackbarProvider>
-    </React.StrictMode>
+    {/* <React.StrictMode> */}
+    <SnackbarProvider maxSnack={3}>
+      <App />
+    </SnackbarProvider>
+    {/* </React.StrictMode> */}
   </Provider>,
   document.getElementById('root')
 )

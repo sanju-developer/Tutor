@@ -15,6 +15,7 @@ import Copyright from 'components/Copyright'
 import { withRouter } from 'react-router'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
+import ErrorComponent from 'components/Errors'
 import '../SignupSignin.scss'
 
 import {
@@ -30,6 +31,8 @@ import { commonApiAction } from 'redux/actions/commonApiAction'
 import { TutorSignupReducerName } from 'redux/constants/reducerNames'
 import { removeEmptyKeyFromObject } from 'utils/helperFunction'
 import { setAccessToken, setRefreshToken } from 'utils/helperFunction'
+import { apiCommonActionType } from 'redux/constants/actionTypeName'
+import { commonActionCreator } from 'redux/actions/commonActionCreator'
 import Loader from 'components/Loaders'
 
 const useStyles = makeStyles(theme => ({
@@ -57,7 +60,8 @@ function TutorSignup({
   signupData,
   tutorSignup,
   isApiLoading,
-  erronOnSignup,
+  erronOnTutorSignup,
+  clearError,
 }) {
   const signUpFormFields = {
     firstName: '',
@@ -100,13 +104,18 @@ function TutorSignup({
   }, [signUpFormState, isEmailValid])
 
   useEffect(() => {
-    if (prevStateOfIsApiLoading.current && !erronOnSignup) {
+    if (erronOnTutorSignup) clearError()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [erronOnTutorSignup])
+
+  useEffect(() => {
+    if (prevStateOfIsApiLoading.current && signupData) {
       setAccessToken(signupData.access)
       setRefreshToken(signupData.refresh)
       history.push('/dashboard')
     } else prevStateOfIsApiLoading.current = isApiLoading
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isApiLoading, erronOnSignup])
+  }, [isApiLoading, erronOnTutorSignup])
 
   const submitRegisterForm = () => {
     const copyOfSignUpFormState = { ...signUpFormState }
@@ -308,6 +317,9 @@ function TutorSignup({
         <Copyright />
       </Box>
       <Box className="tutor-signup-div" />
+      {/* {erronOnTutorSignup && (
+        <ErrorComponent message={erronOnTutorSignup.data.detail} variant="error" />
+      )} */}
     </Container>
   )
 }
@@ -315,7 +327,7 @@ function TutorSignup({
 const mapStateToProps = state => {
   return {
     isApiLoading: state.tutorSignup.isApiLoading,
-    erronOnSignup: state.tutorSignup.apiError,
+    erronOnTutorSignup: state.tutorSignup.apiError,
     signupData: state.tutorSignup.apiData,
   }
 }
@@ -325,6 +337,13 @@ const mapDispatchToProps = dispatch => {
     tutorSignup: body =>
       dispatch(
         commonApiAction(SignupServiceForTutor)(TutorSignupReducerName, body)
+      ),
+    clearError: () =>
+      dispatch(
+        commonActionCreator(TutorSignupReducerName)(
+          apiCommonActionType.clearError,
+          null
+        )
       ),
   }
 }
@@ -336,12 +355,14 @@ export default connect(
 
 TutorSignup.propTypes = {
   isApiLoading: PropTypes.bool.isRequired,
-  erronOnSignup: PropTypes.object,
-  signupData: PropTypes.object.isRequired,
+  erronOnTutorSignup: PropTypes.object,
+  signupData: PropTypes.object,
   history: PropTypes.object.isRequired,
   tutorSignup: PropTypes.func.isRequired,
+  clearError: PropTypes.func.isRequired,
 }
 
 TutorSignup.defaultProps = {
-  erronOnSignup: null,
+  erronOnTutorSignup: null,
+  signupData: null,
 }

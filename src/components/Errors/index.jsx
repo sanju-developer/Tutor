@@ -4,7 +4,16 @@ import { withSnackbar, useSnackbar } from 'notistack'
 function ErrorComponent({ message, variant }) {
   const { enqueueSnackbar } = useSnackbar()
 
-  return enqueueSnackbar(message, { variant: variant })
+  const showError = (message, variant) => {
+    // variant could be success, error, warning, info, or default
+    if (Array.isArray(message)) {
+      message.map(item => enqueueSnackbar(item, { variant: variant }))
+    } else {
+      return enqueueSnackbar(message, { variant: variant })
+    }
+  }
+
+  return showError(message, variant)
 }
 
 export default withSnackbar(ErrorComponent)

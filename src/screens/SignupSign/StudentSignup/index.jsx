@@ -20,6 +20,9 @@ import { SignupServiceForStudent } from 'services/signup'
 import { commonApiAction } from 'redux/actions/commonApiAction'
 import { StudentSignupReducerName } from 'redux/constants/reducerNames'
 import { setAccessToken, setRefreshToken } from 'utils/helperFunction'
+import { apiCommonActionType } from 'redux/constants/actionTypeName'
+import { commonActionCreator } from 'redux/actions/commonActionCreator'
+import ErrorComponent from 'components/Errors'
 import Loader from 'components/Loaders'
 
 const useStyles = makeStyles(theme => ({
@@ -47,7 +50,8 @@ function StudentSignup({
   signupData,
   studentSignup,
   isApiLoading,
-  erronOnSignup,
+  erronOnStudentSignup,
+  clearError,
 }) {
   const signUpFormFields = {
     firstName: '',
@@ -71,13 +75,18 @@ function StudentSignup({
   }
 
   useEffect(() => {
-    if (prevStateOfIsApiLoading.current && !erronOnSignup) {
+    if (erronOnStudentSignup) clearError()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [erronOnStudentSignup])
+
+  useEffect(() => {
+    if (prevStateOfIsApiLoading.current && signupData) {
       setAccessToken(signupData.access)
       setRefreshToken(signupData.refresh)
       history.push('/dashboard')
     } else prevStateOfIsApiLoading.current = isApiLoading
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isApiLoading, erronOnSignup])
+  }, [isApiLoading])
 
   useEffect(() => {
     if (
@@ -235,13 +244,17 @@ function StudentSignup({
       <Box mt={5}>
         <Copyright />
       </Box>
+      {/* {erronOnStudentSignup && (
+        <ErrorComponent message={erronOnStudentSignup.data.detail} variant="error" />
+      )} */}
     </Container>
   )
 }
 const mapStateToProps = state => {
   return {
     isApiLoading: state.studentSignup.isApiLoading,
-    erronOnSignup: state.studentSignup.apiError,
+    erronOnStudentSignup: state.studentSignup.apiError,
+    isApiFailed: state.studentSignup.isApiFailed,
     signupData: state.studentSignup.apiData,
   }
 }
@@ -251,6 +264,13 @@ const mapDispatchToProps = dispatch => {
     studentSignup: body =>
       dispatch(
         commonApiAction(SignupServiceForStudent)(StudentSignupReducerName, body)
+      ),
+    clearError: () =>
+      dispatch(
+        commonActionCreator(StudentSignupReducerName)(
+          apiCommonActionType.clearError,
+          null
+        )
       ),
   }
 }
@@ -262,12 +282,14 @@ export default connect(
 
 StudentSignup.propTypes = {
   isApiLoading: PropTypes.bool.isRequired,
-  erronOnSignup: PropTypes.object,
-  signupData: PropTypes.object.isRequired,
+  erronOnStudentSignup: PropTypes.object,
+  signupData: PropTypes.object,
   history: PropTypes.object.isRequired,
   studentSignup: PropTypes.func.isRequired,
+  clearError: PropTypes.func.isRequired,
 }
 
 StudentSignup.defaultProps = {
-  erronOnSignup: null,
+  erronOnStudentSignup: null,
+  signupData: null,
 }
