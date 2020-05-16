@@ -22,6 +22,7 @@ import { StudentSignupReducerName } from 'redux/constants/reducerNames'
 import { setAccessToken, setRefreshToken } from 'utils/helperFunction'
 import { apiCommonActionType } from 'redux/constants/actionTypeName'
 import { commonActionCreator } from 'redux/actions/commonActionCreator'
+import { getUserRoleInLS } from 'utils/helperFunction'
 import ErrorComponent from 'components/Errors'
 import Loader from 'components/Loaders'
 
@@ -52,6 +53,7 @@ function StudentSignup({
   isApiLoading,
   erronOnStudentSignup,
   clearError,
+  signinAs,
 }) {
   const signUpFormFields = {
     firstName: '',
@@ -73,6 +75,10 @@ function StudentSignup({
       [name]: value,
     })
   }
+  useEffect(() => {
+    if (!signinAs && !getUserRoleInLS()) history.replace('/')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [signinAs])
 
   useEffect(() => {
     if (erronOnStudentSignup) clearError()
@@ -124,7 +130,7 @@ function StudentSignup({
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up
+          Sign up {signinAs || getUserRoleInLS()}
         </Typography>
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
@@ -244,9 +250,12 @@ function StudentSignup({
       <Box mt={5}>
         <Copyright />
       </Box>
-      {/* {erronOnStudentSignup && (
-        <ErrorComponent message={erronOnStudentSignup.data.detail} variant="error" />
-      )} */}
+      {erronOnStudentSignup && (
+        <ErrorComponent
+          message={erronOnStudentSignup.data?.error}
+          variant="error"
+        />
+      )}
     </Container>
   )
 }
@@ -256,6 +265,7 @@ const mapStateToProps = state => {
     erronOnStudentSignup: state.studentSignup.apiError,
     isApiFailed: state.studentSignup.isApiFailed,
     signupData: state.studentSignup.apiData,
+    signinAs: state.userRole.userRole,
   }
 }
 
@@ -284,6 +294,7 @@ StudentSignup.propTypes = {
   isApiLoading: PropTypes.bool.isRequired,
   erronOnStudentSignup: PropTypes.object,
   signupData: PropTypes.object,
+  signinAs: PropTypes.string,
   history: PropTypes.object.isRequired,
   studentSignup: PropTypes.func.isRequired,
   clearError: PropTypes.func.isRequired,
@@ -292,4 +303,5 @@ StudentSignup.propTypes = {
 StudentSignup.defaultProps = {
   erronOnStudentSignup: null,
   signupData: null,
+  signinAs: null,
 }

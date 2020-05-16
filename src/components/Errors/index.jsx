@@ -7,7 +7,11 @@ function ErrorComponent({ message, variant }) {
   const showError = (message, variant) => {
     // variant could be success, error, warning, info, or default
     if (Array.isArray(message)) {
-      message.map(item => enqueueSnackbar(item, { variant: variant }))
+      for (let index = 0; index < message.length; index++) {
+        return enqueueSnackbar(message[index], {
+          variant: variant,
+        })
+      }
     } else {
       return enqueueSnackbar(message, { variant: variant })
     }
@@ -18,6 +22,6 @@ function ErrorComponent({ message, variant }) {
 
 export default withSnackbar(ErrorComponent)
 ErrorComponent.propTypes = {
-  message: PropTypes.string.isRequired,
+  message: PropTypes.oneOfType([PropTypes.string, PropTypes.array]).isRequired,
   variant: PropTypes.string.isRequired,
 }

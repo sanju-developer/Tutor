@@ -33,6 +33,7 @@ import { removeEmptyKeyFromObject } from 'utils/helperFunction'
 import { setAccessToken, setRefreshToken } from 'utils/helperFunction'
 import { apiCommonActionType } from 'redux/constants/actionTypeName'
 import { commonActionCreator } from 'redux/actions/commonActionCreator'
+import { getUserRoleInLS } from 'utils/helperFunction'
 import Loader from 'components/Loaders'
 
 const useStyles = makeStyles(theme => ({
@@ -62,6 +63,7 @@ function TutorSignup({
   isApiLoading,
   erronOnTutorSignup,
   clearError,
+  signinAs,
 }) {
   const signUpFormFields = {
     firstName: '',
@@ -85,6 +87,11 @@ function TutorSignup({
       [name]: value,
     })
   }
+
+  useEffect(() => {
+    if (!signinAs && !getUserRoleInLS()) history.replace('/')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [signinAs])
 
   useEffect(() => {
     if (
@@ -149,7 +156,7 @@ function TutorSignup({
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign up
+          Sign up {signinAs || getUserRoleInLS()}
         </Typography>
         <form className={classes.form} noValidate>
           <Grid container spacing={2}>
@@ -317,9 +324,12 @@ function TutorSignup({
         <Copyright />
       </Box>
       <Box className="tutor-signup-div" />
-      {/* {erronOnTutorSignup && (
-        <ErrorComponent message={erronOnTutorSignup.data.detail} variant="error" />
-      )} */}
+      {erronOnTutorSignup && (
+        <ErrorComponent
+          message={erronOnTutorSignup.data.error}
+          variant="error"
+        />
+      )}
     </Container>
   )
 }
@@ -360,9 +370,11 @@ TutorSignup.propTypes = {
   history: PropTypes.object.isRequired,
   tutorSignup: PropTypes.func.isRequired,
   clearError: PropTypes.func.isRequired,
+  signinAs: PropTypes.string,
 }
 
 TutorSignup.defaultProps = {
   erronOnTutorSignup: null,
   signupData: null,
+  signinAs: null,
 }
