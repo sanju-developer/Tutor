@@ -64,7 +64,7 @@ export const api = (
   const apiParameter = {
     method: apiMethod,
     url: API.BASE_URL + endpoint,
-    // withCredentials: true,
+    withCredentials: isWithCredentialTrue(endpoint),
     timeout: 1000 * 120, // Wait for 120 seconds
   }
   // get refreshToken and accessToken in session storage, inorder to prevent sideffect on page reload
@@ -105,4 +105,15 @@ function handleResponse(response) {
     res = response
   }
   return res
+}
+
+function isWithCredentialTrue(endpoint) {
+  if (
+    endpoints.student_login === endpoint ||
+    endpoints.tutor_login === endpoint ||
+    endpoints.student_login === endpoint ||
+    endpoints.tutor_signup === endpoint
+  )
+    return false
+  else return true
 }
