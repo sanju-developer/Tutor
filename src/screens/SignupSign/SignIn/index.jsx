@@ -24,9 +24,10 @@ import { EntryAsStudent } from 'utils/commonConstants'
 import { setAccessToken, setRefreshToken } from 'utils/helperFunction'
 import { SignInReducerName } from 'redux/constants/reducerNames'
 import { getUserRoleInLS } from 'utils/helperFunction'
-import ErrorComponent from '../../../components/Errors'
-import { commonActionCreator } from '../../../redux/actions/commonActionCreator'
-import { apiCommonActionType } from '../../../redux/constants/actionTypeName'
+import Loader from 'components/Loaders'
+import ErrorComponent from 'components/Errors'
+import { commonActionCreator } from 'redux/actions/commonActionCreator'
+import { apiCommonActionType } from 'redux/constants/actionTypeName'
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -54,7 +55,7 @@ function SignIn({
   signinAsTutor,
   signinAsStudent,
   signInData,
-  isApiLoading,
+  isSigninApiLoading,
   erronOnSignin,
   clearError,
 }) {
@@ -93,6 +94,7 @@ function SignIn({
 
   useEffect(() => {
     if (erronOnSignin) clearError()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [erronOnSignin])
 
   useEffect(() => {
@@ -105,9 +107,9 @@ function SignIn({
       setAccessToken(signInData.access)
       setRefreshToken(signInData.refresh)
       history.push('/dashboard')
-    } else prevStateOfIsApiLoading.current = isApiLoading
+    } else prevStateOfIsApiLoading.current = isSigninApiLoading
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isApiLoading, erronOnSignin])
+  }, [isSigninApiLoading, erronOnSignin])
 
   useEffect(() => {
     if (
@@ -210,12 +212,17 @@ function SignIn({
             <Button
               type="button"
               fullWidth
+              disabled={isSigninApiLoading}
               variant="contained"
               color="primary"
               className={classes.submit}
               onClick={submitLoginForm}
             >
-              Sign In
+              {isSigninApiLoading ? (
+                <Loader type="circularLoader" />
+              ) : (
+                'Sign Up'
+              )}
             </Button>
             <Grid container>
               <Grid item xs>
@@ -227,9 +234,6 @@ function SignIn({
                 <Link variant="body2" onClick={handleClickOpen}>
                   Do not have an account? Sign Up
                 </Link>
-                {/* <Button color="default" onClick={handleClickOpen}>
-                  Do not have an account? Sign Up
-                </Button> */}
                 <GetStartedDialog
                   selectedValue={selectedValue}
                   open={open}
@@ -252,7 +256,7 @@ function SignIn({
 
 const mapStateToProps = state => {
   return {
-    isApiLoading: state.signIn.isApiLoading,
+    isSigninApiLoading: state.signIn.isApiLoading,
     erronOnSignin: state.signIn.apiError,
     signInData: state.signIn.apiData,
     signinAs: state.userRole.userRole,
@@ -280,7 +284,7 @@ const mapDispatchToProps = dispatch => {
 export default connect(mapStateToProps, mapDispatchToProps)(SignIn)
 
 SignIn.propTypes = {
-  isApiLoading: PropTypes.bool.isRequired,
+  isSigninApiLoading: PropTypes.bool.isRequired,
   erronOnSignin: PropTypes.object,
   signInData: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
