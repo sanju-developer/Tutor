@@ -127,8 +127,8 @@ function HomeSidebar({ history }) {
       if (value === 'Student') {
         history.push('/student-signup')
       } else if (value === 'Tutor') history.push('/tutor-signup')
-    } else {
-      history.push('/signin')
+    } else if (whichButtonClick === 'signIn') {
+      history.push('/signIn')
     }
   }
 
