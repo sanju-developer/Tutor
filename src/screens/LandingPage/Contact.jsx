@@ -1,6 +1,7 @@
 import React from 'react'
 import LandingPageWrraper from '.'
 import { Container, Box, Typography } from '@material-ui/core'
+import Team from './Team'
 
 function Contact() {
   return (
@@ -27,6 +28,7 @@ function Contact() {
         <h3>Phone:</h3> 9999262312, 9999232123
         <h3>Email:</h3> tutorForYou@gmail.com
       </Box>
+      <Team />
     </Container>
   )
 }

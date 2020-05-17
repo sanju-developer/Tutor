@@ -22,8 +22,10 @@ import ContactsIcon from '@material-ui/icons/Contacts'
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney'
 import HomeIcon from '@material-ui/icons/Home'
 import { withRouter } from 'react-router-dom'
+import GetStartedDialog from 'components/Dialog/GetStartedDialog'
 import { LandingPageDrawerItems } from 'utils/commonConstants'
 import PropTypes from 'prop-types'
+import { Box, Button } from '@material-ui/core'
 
 const drawerWidth = 240
 
@@ -101,13 +103,33 @@ function HomeSidebar({ history }) {
   const classes = useStyles()
   const theme = useTheme()
   const [open, setOpen] = React.useState(false)
+  const [openSidebar, setOpenSidebar] = React.useState(false)
+  const [whichButtonClick, setWhichButtonClick] = React.useState(null)
+  const [selectedValue, setSelectedValue] = React.useState(null)
 
   const handleDrawerOpen = () => {
-    setOpen(true)
+    setOpenSidebar(true)
   }
 
   const handleDrawerClose = () => {
+    setOpenSidebar(false)
+  }
+
+  const handleClickOpen = buttonType => {
+    setWhichButtonClick(buttonType)
+    setOpen(true)
+  }
+
+  const handleClose = value => {
     setOpen(false)
+    setSelectedValue(value)
+    if (whichButtonClick === 'signup') {
+      if (value === 'Student') {
+        history.push('/student-signup')
+      } else if (value === 'Tutor') history.push('/tutor-signup')
+    } else {
+      history.push('/signin')
+    }
   }
 
   return (
@@ -117,25 +139,27 @@ function HomeSidebar({ history }) {
         color="default"
         position="fixed"
         className={clsx(classes.appBar, {
-          [classes.appBarShift]: open,
+          [classes.appBarShift]: openSidebar,
         })}
       >
         <Toolbar>
           <Typography
             color="primary"
             variant="h6"
+            style={{ cursor: 'pointer' }}
             noWrap
             className={classes.title}
+            onClick={() => history.push('/')}
           >
             Tutor
           </Typography>
           <div className={classes.sectionMobile}>
             <IconButton
               color="inherit"
-              aria-label="open drawer"
+              aria-label="openSidebar drawer"
               edge="end"
               onClick={handleDrawerOpen}
-              className={clsx(open && classes.hide)}
+              className={clsx(openSidebar && classes.hide)}
             >
               <MenuIcon />
             </IconButton>
@@ -154,12 +178,30 @@ function HomeSidebar({ history }) {
                 {item.name}
               </Typography>
             ))}
+            <Box mx={2} display="inline">
+              <Button
+                variant="contained"
+                color="secondary"
+                onClick={() => handleClickOpen('signup')}
+              >
+                Sign up
+              </Button>
+            </Box>
+            <Box mx={2} display="inline">
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => handleClickOpen('signIn')}
+              >
+                Sign in
+              </Button>
+            </Box>
           </div>
         </Toolbar>
       </AppBar>
       <main
         className={clsx(classes.content, {
-          [classes.contentShift]: open,
+          [classes.contentShift]: openSidebar,
         })}
       >
         <div className={classes.drawerHeader} />
@@ -168,7 +210,7 @@ function HomeSidebar({ history }) {
         className={classes.drawer}
         variant="persistent"
         anchor="right"
-        open={open}
+        open={openSidebar}
         classes={{
           paper: classes.drawerPaper,
         }}
@@ -208,8 +250,33 @@ function HomeSidebar({ history }) {
               <ListItemText primary={text.name} />
             </ListItem>
           ))}
+          <Box m={2} textAlign="center" display="block">
+            <Button
+              style={{ padding: '10px 70px' }}
+              variant="contained"
+              color="secondary"
+              onClick={() => handleClickOpen('signup')}
+            >
+              Sign up
+            </Button>
+          </Box>
+          <Box m={2} textAlign="center" display="block">
+            <Button
+              style={{ padding: '10px 70px' }}
+              variant="contained"
+              color="primary"
+              onClick={() => handleClickOpen('signIn')}
+            >
+              Sign in
+            </Button>
+          </Box>
         </List>
       </Drawer>
+      <GetStartedDialog
+        selectedValue={selectedValue}
+        open={open}
+        onClose={handleClose}
+      />
     </div>
   )
 }

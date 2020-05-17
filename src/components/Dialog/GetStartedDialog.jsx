@@ -42,7 +42,7 @@ function GetStartedDialog(props) {
       aria-labelledby="simple-dialog-title"
       open={open}
     >
-      <DialogTitle id="simple-dialog-title">Sign up as </DialogTitle>
+      <DialogTitle id="simple-dialog-title">Signup with </DialogTitle>
       <List>
         {emails.map(type => (
           <ListItem button onClick={() => handleListItemClick(type)} key={type}>

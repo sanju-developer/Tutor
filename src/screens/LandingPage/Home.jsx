@@ -1,32 +1,11 @@
 import React from 'react'
 import LandingPageWrraper from '.'
-import { Typography, Button, Grid, Container, Box } from '@material-ui/core'
-import GetStartedDialog from 'components/Dialog/GetStartedDialog'
+import { Typography, Grid, Container } from '@material-ui/core'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
 import Icons from 'components/Icons'
 
 const Home = ({ history }) => {
-  const [open, setOpen] = React.useState(false)
-  const [whichButtonClick, setWhichButtonClick] = React.useState(null)
-  const [selectedValue, setSelectedValue] = React.useState(null)
-
-  const handleClickOpen = buttonType => {
-    setWhichButtonClick(buttonType)
-    setOpen(true)
-  }
-
-  const handleClose = value => {
-    setOpen(false)
-    setSelectedValue(value)
-    if (whichButtonClick === 'signup') {
-      if (value === 'Student') {
-        history.push('/student-signup')
-      } else if (value === 'Tutor') history.push('/tutor-signup')
-    } else {
-      history.push('/signin')
-    }
-  }
   return (
     <Container>
       <Grid container spacing={2}>
@@ -53,29 +32,6 @@ const Home = ({ history }) => {
         </Grid>
         <Grid item xs={12} sm={12} align="end" mx="auto">
           <br />
-          <Box mx={2} display="inline">
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => handleClickOpen('signup')}
-            >
-              Sign up
-            </Button>
-          </Box>
-          <Box mx={2} display="inline">
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => handleClickOpen('signIn')}
-            >
-              Sign in
-            </Button>
-          </Box>
-          <GetStartedDialog
-            selectedValue={selectedValue}
-            open={open}
-            onClose={handleClose}
-          />
         </Grid>
       </Grid>
     </Container>
