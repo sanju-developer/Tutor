@@ -1,6 +1,6 @@
 import React from 'react'
 import LandingPageWrraper from './index'
-import { Container, Grid, Box, Typography, Button } from '@material-ui/core'
+import { Container, Grid, Box, Typography } from '@material-ui/core'
 
 function Features() {
   return (
@@ -23,11 +23,11 @@ function Features() {
             velit laoreet id donec ultrices. Odio morbi quis commodo odio aenean
             sed adipiscing.
           </Typography>
-          <Box textAlign="right">
+          {/* <Box textAlign="right">
             <Button variant="outlined" color="default">
               Let's create class
             </Button>
-          </Box>
+          </Box> */}
         </Grid>
 
         <Grid item xs={12} sm={6}>
@@ -44,11 +44,11 @@ function Features() {
             velit laoreet id donec ultrices. Odio morbi quis commodo odio aenean
             sed adipiscing.
           </Typography>
-          <Box textAlign="right">
+          {/* <Box textAlign="right">
             <Button variant="outlined" color="default" align="center">
               Attend class
             </Button>
-          </Box>
+          </Box> */}
         </Grid>
 
         <Grid item xs={12} sm={6}>
@@ -65,11 +65,11 @@ function Features() {
             velit laoreet id donec ultrices. Odio morbi quis commodo odio aenean
             sed adipiscing.
           </Typography>
-          <Box textAlign="right">
+          {/* <Box textAlign="right">
             <Button variant="outlined" color="default">
               How it's secure
             </Button>
-          </Box>
+          </Box> */}
         </Grid>
       </Grid>
     </Container>

@@ -55,7 +55,7 @@ const Home = ({ history }) => {
           <br />
           <Box mx={2} display="inline">
             <Button
-              variant="outlined"
+              variant="contained"
               color="secondary"
               onClick={() => handleClickOpen('signup')}
             >
@@ -64,7 +64,7 @@ const Home = ({ history }) => {
           </Box>
           <Box mx={2} display="inline">
             <Button
-              variant="outlined"
+              variant="contained"
               color="primary"
               onClick={() => handleClickOpen('signIn')}
             >

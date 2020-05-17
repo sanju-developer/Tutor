@@ -1,0 +1,20 @@
+.Page-not-found {
+  background-image: url('../../assets//images/pagenotfound.svg');
+  background-position: center center;
+  background-repeat: no-repeat;
+  margin-top: 100px;
+  height: 50vh;
+  background-size: contain;
+
+  .home-btn {
+    position: absolute;
+    top: 70%;
+    width: 100%;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .Page-not-found .home-btn {
+    top: 60%;
+  }
+}

@@ -22,6 +22,7 @@ import ContactsIcon from '@material-ui/icons/Contacts'
 import AttachMoneyIcon from '@material-ui/icons/AttachMoney'
 import HomeIcon from '@material-ui/icons/Home'
 import { withRouter } from 'react-router-dom'
+import { LandingPageDrawerItems } from 'utils/commonConstants'
 import PropTypes from 'prop-types'
 
 const drawerWidth = 240
@@ -46,6 +47,7 @@ const useStyles = makeStyles(theme => ({
   },
   title: {
     flexGrow: 1,
+    padding: '0px 10px',
   },
   hide: {
     display: 'none',
@@ -81,6 +83,18 @@ const useStyles = makeStyles(theme => ({
     }),
     marginRight: 0,
   },
+  sectionDesktop: {
+    display: 'none',
+    [theme.breakpoints.up('md')]: {
+      display: 'flex',
+    },
+  },
+  sectionMobile: {
+    display: 'flex',
+    [theme.breakpoints.up('md')]: {
+      display: 'none',
+    },
+  },
 }))
 
 function HomeSidebar({ history }) {
@@ -107,18 +121,40 @@ function HomeSidebar({ history }) {
         })}
       >
         <Toolbar>
-          <Typography variant="h6" noWrap className={classes.title}>
+          <Typography
+            color="primary"
+            variant="h6"
+            noWrap
+            className={classes.title}
+          >
             Tutor
           </Typography>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="end"
-            onClick={handleDrawerOpen}
-            className={clsx(open && classes.hide)}
-          >
-            <MenuIcon />
-          </IconButton>
+          <div className={classes.sectionMobile}>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="end"
+              onClick={handleDrawerOpen}
+              className={clsx(open && classes.hide)}
+            >
+              <MenuIcon />
+            </IconButton>
+          </div>
+          <div className={classes.sectionDesktop}>
+            {LandingPageDrawerItems.map(item => (
+              <Typography
+                edge="end"
+                variant="h6"
+                color="primary"
+                noWrap
+                className={classes.title}
+                style={{ cursor: 'pointer' }}
+                onClick={() => history.push(item.route)}
+              >
+                {item.name}
+              </Typography>
+            ))}
+          </div>
         </Toolbar>
       </AppBar>
       <main
@@ -148,14 +184,7 @@ function HomeSidebar({ history }) {
         </div>
         <Divider />
         <List>
-          {[
-            { name: 'Home', route: '/' },
-            { name: 'Features', route: '/features' },
-            { name: 'Support', route: '/support' },
-            { name: 'Team', route: '/team' },
-            { name: 'Contact', route: '/contact' },
-            { name: 'Pricing', route: '/pricing' },
-          ].map((text, index) => (
+          {LandingPageDrawerItems.map((text, index) => (
             <ListItem
               button
               key={text.name}

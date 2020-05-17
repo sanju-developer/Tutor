@@ -56,9 +56,6 @@ function Pricing() {
   return (
     <>
       <Container maxWidth="sm" component="main" className={classes.heroContent}>
-        <h1>
-          <span>Pricing</span>
-        </h1>
         <Typography
           component="h1"
           variant="h2"

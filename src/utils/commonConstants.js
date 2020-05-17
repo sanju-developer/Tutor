@@ -11,3 +11,12 @@ export const httpMethods = {
 
 export const EntryAsOwner = 'owner' || 'teacher'
 export const EntryAsStudent = 'Student'
+
+export const LandingPageDrawerItems = [
+  { name: 'Home', route: '/' },
+  { name: 'Features', route: '/features' },
+  { name: 'Support', route: '/support' },
+  { name: 'Team', route: '/team' },
+  { name: 'Contact', route: '/contact' },
+  { name: 'Pricing', route: '/pricing' },
+]

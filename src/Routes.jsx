@@ -14,6 +14,7 @@ import Support from './screens/LandingPage/Support'
 import Team from './screens/LandingPage/Team'
 import TutorSignup from './screens/SignupSign/TutorSignup'
 import SignIn from './screens/SignupSign/SignIn'
+import PageNotFound from './components/PageNotFound'
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
   return (
@@ -106,6 +107,7 @@ export const Routing = () => {
           exact
         />
         <PrivateRoute component={Dashboard} path="/dashboard" exact />
+        <Route path="*" component={PageNotFound} />
       </Switch>
     </BrowserRouter>
   )
