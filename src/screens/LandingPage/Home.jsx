@@ -4,6 +4,7 @@ import { Typography, Grid, Container } from '@material-ui/core'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router'
 import Icons from 'components/Icons'
+import Features from './Features'
 
 const Home = ({ history }) => {
   return (
@@ -14,7 +15,7 @@ const Home = ({ history }) => {
         </Grid>
         <Grid item xs={12} sm={7}>
           <h1>Study online, without interruption</h1>
-          <Typography paragraph align="center">
+          <Typography align="center">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Rhoncus
             dolor purus non enim praesent elementum facilisis leo vel. Risus at
@@ -30,10 +31,8 @@ const Home = ({ history }) => {
             donec massa sapien faucibus et molestie ac.
           </Typography>
         </Grid>
-        <Grid item xs={12} sm={12} align="end" mx="auto">
-          <br />
-        </Grid>
       </Grid>
+      <Features />
     </Container>
   )
 }

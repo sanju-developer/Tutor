@@ -100,4 +100,4 @@ function Team() {
   )
 }
 
-export default LandingPageWrraper(Team)
+export default Team

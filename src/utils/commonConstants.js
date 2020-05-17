@@ -14,7 +14,7 @@ export const EntryAsStudent = 'Student'
 
 export const LandingPageDrawerItems = [
   // { name: 'Home', route: '/' },
-  { name: 'Features', route: '/features' },
+  // { name: 'Features', route: '/features' },
   { name: 'Support', route: '/support' },
   // { name: 'Team', route: '/team' },
   { name: 'Contact', route: '/contact' },
