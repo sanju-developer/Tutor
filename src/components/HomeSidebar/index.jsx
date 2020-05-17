@@ -26,6 +26,7 @@ import GetStartedDialog from 'components/Dialog/GetStartedDialog'
 import { LandingPageDrawerItems } from 'utils/commonConstants'
 import PropTypes from 'prop-types'
 import { Box, Button } from '@material-ui/core'
+import { clearUserRoleLS } from 'utils/helperFunction'
 
 const drawerWidth = 240
 
@@ -116,19 +117,22 @@ function HomeSidebar({ history }) {
   }
 
   const handleClickOpen = buttonType => {
+    clearUserRoleLS()
     setWhichButtonClick(buttonType)
     setOpen(true)
   }
 
   const handleClose = value => {
     setOpen(false)
-    setSelectedValue(value)
-    if (whichButtonClick === 'signup') {
-      if (value === 'Student') {
-        history.push('/student-signup')
-      } else if (value === 'Tutor') history.push('/tutor-signup')
-    } else if (whichButtonClick === 'signIn') {
-      history.push('/signIn')
+    if (value) {
+      setSelectedValue(value)
+      if (whichButtonClick === 'signup') {
+        if (value === 'Student') {
+          history.push('/student-signup')
+        } else if (value === 'Tutor') history.push('/tutor-signup')
+      } else if (whichButtonClick === 'signIn') {
+        history.push('/signIn')
+      }
     }
   }
 

@@ -22,7 +22,7 @@ const useStyles = makeStyles({
 })
 
 function GetStartedDialog(props) {
-  const emails = ['Student', 'Tutor']
+  const entryTypes = ['Student', 'Tutor']
   const classes = useStyles()
   const { onClose, selectedValue, open, setUserRole } = props
 
@@ -42,9 +42,9 @@ function GetStartedDialog(props) {
       aria-labelledby="simple-dialog-title"
       open={open}
     >
-      <DialogTitle id="simple-dialog-title">Signup with </DialogTitle>
+      <DialogTitle id="simple-dialog-title">Entry with </DialogTitle>
       <List>
-        {emails.map(type => (
+        {entryTypes.map(type => (
           <ListItem button onClick={() => handleListItemClick(type)} key={type}>
             <ListItemAvatar>
               <Avatar className={classes.avatar}>

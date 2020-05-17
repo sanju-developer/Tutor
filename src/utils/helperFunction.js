@@ -67,6 +67,10 @@ export function getUserRoleInLS() {
   return localStorage.getItem('userRole')
 }
 
+export function clearUserRoleLS() {
+  localStorage.clear('userRole')
+}
+
 // set headers name on click of item from sidebar
 export function getHeadersName() {
   return localStorage.getItem('headerName')
