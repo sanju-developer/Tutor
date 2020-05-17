@@ -1,5 +1,4 @@
 import React from 'react'
-import LandingPageWrraper from '.'
 import './Landing.scss'
 import {
   Container,
