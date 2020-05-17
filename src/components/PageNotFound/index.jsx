@@ -14,7 +14,7 @@ function PageNotFound({ history }) {
           color="primary"
           onClick={() => history.push('/dashboard')}
         >
-          Home
+          Go Back To Home
         </Button>
       </Box>
     </div>
