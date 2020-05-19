@@ -3,7 +3,7 @@ import { Route, Redirect } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 import { BrowserRouter, Switch } from 'react-router-dom'
-import Dashboard from 'screens/Dashboard'
+import ShowForTeacherOrStudent from 'screens/Dashboard/ShowForTeacherOrStudent'
 import { isLoggedIn } from 'utils/helperFunction'
 import StudentSignup from './screens/SignupSign/StudentSignup'
 import Home from './screens/LandingPage/Home'
@@ -106,7 +106,11 @@ export const Routing = () => {
           path="/student-signup"
           exact
         />
-        <PrivateRoute component={Dashboard} path="/dashboard" exact />
+        <PrivateRoute
+          component={ShowForTeacherOrStudent}
+          path="/dashboard"
+          exact
+        />
         <Route path="*" component={PageNotFound} />
       </Switch>
     </BrowserRouter>
