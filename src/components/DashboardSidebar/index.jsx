@@ -13,6 +13,7 @@ import MenuIcon from '@material-ui/icons/Menu'
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import ListItem from '@material-ui/core/ListItem'
+import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import CastForEducationIcon from '@material-ui/icons/CastForEducation'
@@ -139,11 +140,17 @@ export default function DashboardSidebar() {
         </div>
         <Divider />
         <List>
-          <ListItem button key="Dashboard-sidebar">
+          <ListItem button key="Dashboard-sidebar-Class">
             <ListItemIcon>
               <CastForEducationIcon />
             </ListItemIcon>
             <ListItemText primary="Classes" />
+          </ListItem>
+          <ListItem button key="Dashboard-sidebar-Logout">
+            <ListItemIcon>
+              <ExitToAppIcon />
+            </ListItemIcon>
+            <ListItemText primary="Logout" />
           </ListItem>
         </List>
       </Drawer>
